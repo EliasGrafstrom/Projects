@@ -1,5 +1,5 @@
 ﻿internal class PlayerStats
 {
-    public int PlayerWins { get; set; }
-    public int PlayerMatches { get; set; }
+    public int Wins { get; set; }
+    public int Matches { get; set; }
 }

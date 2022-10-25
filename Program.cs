@@ -1,4 +1,6 @@
-﻿public class Program
+﻿using System.Runtime.InteropServices;
+
+public class Program
 {
     static bool UserInputIsYes()
     {
@@ -168,11 +170,12 @@
             if (UserInputIsYes())
             {
                 return userName;
-            }        
+            }
+            
         }
         while (true);
     }
-
+    
 
     private static int GetRandomCardValue()
     {
@@ -194,25 +197,30 @@
         Console.ReadKey();
         Console.Clear();
     }
-
+    private static string SearchStatistics()
+    {
+        Console.Clear();
+        Console.Write("Skriv namnet du vill se statistik på: ");
+        string inputName = Console.ReadLine();
+        return inputName;
+    }
     public static void Main()
     {
-        PlayerStatsDatabase playerStatsDatabase = new PlayerStatsDatabase();
-
-        string nameOfUser;
         string lastWinner = string.Empty;
+        string nameOfUser;
         while (true)
         {
             Console.WriteLine("Välkommen till 21an!");
             Console.WriteLine("Välj ett alternativ nedan.");
             Console.WriteLine("");
             Console.WriteLine("1. Spela 21an");
-            Console.WriteLine("2. Se senaste vinnaren");
+            Console.WriteLine("2. Senaste Vinnaren");
             Console.WriteLine("3. Spelets Regler");
-            Console.WriteLine("4. Avsluta spelet");
+            Console.WriteLine("4. Visa Statistik");
+            Console.WriteLine("5. Avsluta Spelet");
             string? userInput = Console.ReadLine();
 
-
+            PlayerStatsDatabase playerStatsDatabase = new PlayerStatsDatabase();
 
             switch (userInput)
             {
@@ -221,7 +229,7 @@
                     if (Play21())
                     {
                         playerStatsDatabase.RecordPlayerWin(nameOfUser);
-                        lastWinner = nameOfUser;                     
+                        lastWinner = nameOfUser;
                         Console.Clear();
                     }
                     else
@@ -241,7 +249,12 @@
                     Play21Rules();
                     break;
                 case "4":
-                    return; 
+                    string userName = SearchStatistics();
+                    var statisticsResult = playerStatsDatabase.GetPlayerStats(userName);
+                    Console.WriteLine(statisticsResult);
+                    break;
+                case "5":
+                    return;
             }
         }
     }
