@@ -1,6 +1,6 @@
 ﻿using _21an;
 using System.Runtime.InteropServices;
-
+using Spectre.Console;
 public class Program
 {
     static bool UserInputIsYes()
@@ -139,6 +139,8 @@ public class Program
         }
     }
 
+    
+
     private static string GetName()
     {
         do
@@ -174,10 +176,9 @@ public class Program
             }
             
         }
-        while (true);
+        while (true);     
     }
     
-
     private static int GetRandomCardValue()
     {
         return Random.Shared.Next(1, 10);
@@ -205,14 +206,16 @@ public class Program
         string inputName = Console.ReadLine().ToLower();
         return inputName;
     }
-  
+
+
     public static void Main()
     {
         string lastWinner = string.Empty;
         string nameOfUser;
         while (true)
-        {
-            Console.WriteLine("Välkommen till 21an!");
+        { 
+            AnsiConsole.Markup("[springgreen4]Välkommen till[/] [darkorange]21an![/]");
+            Console.WriteLine("");
             Console.WriteLine("Välj ett alternativ nedan.");
             Console.WriteLine("");
             Console.WriteLine("1. Spela 21an");
