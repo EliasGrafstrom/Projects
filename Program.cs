@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using _21an;
+using System.Runtime.InteropServices;
 
 public class Program
 {
@@ -162,7 +163,7 @@ public class Program
                 continue;
             }
 
-            if (isAlpha)
+             if (isAlpha)
             {
                 Console.WriteLine("Är du säker? (ja/nej)");
             }
@@ -201,9 +202,10 @@ public class Program
     {
         Console.Clear();
         Console.Write("Skriv namnet du vill se statistik på: ");
-        string inputName = Console.ReadLine();
+        string inputName = Console.ReadLine().ToLower();
         return inputName;
     }
+  
     public static void Main()
     {
         string lastWinner = string.Empty;
@@ -216,8 +218,9 @@ public class Program
             Console.WriteLine("1. Spela 21an");
             Console.WriteLine("2. Senaste Vinnaren");
             Console.WriteLine("3. Spelets Regler");
-            Console.WriteLine("4. Visa Statistik");
-            Console.WriteLine("5. Avsluta Spelet");
+            Console.WriteLine("4. Sök Statistiken");
+            Console.WriteLine("5. Visa All Statistik");
+            Console.WriteLine("6. Avsluta Spelet");
             string? userInput = Console.ReadLine();
 
             PlayerStatsDatabase playerStatsDatabase = new PlayerStatsDatabase();
@@ -249,11 +252,20 @@ public class Program
                     Play21Rules();
                     break;
                 case "4":
-                    string userName = SearchStatistics();
+                    string userName = SearchStatistics().FirstCharToUpper();             
                     var statisticsResult = playerStatsDatabase.GetPlayerStats(userName);
-                    Console.WriteLine(statisticsResult);
+                    Console.WriteLine($"Spelare: {userName} {statisticsResult}");
+                    ReturnToMenu();
                     break;
                 case "5":
+                    Console.Clear();
+                    foreach (var user in playerStatsDatabase.GetAllStats())
+                    {
+                        Console.WriteLine($"{user.Name.FirstCharToUpper()} {user.Stats}\n");
+                    }
+                    ReturnToMenu();
+                    break;
+                case "6":
                     return;
             }
         }

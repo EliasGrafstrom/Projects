@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using _21an;
+using System.IO;
 using System.Text.Json;
 
 internal class PlayerStatsDatabase
@@ -26,16 +27,16 @@ internal class PlayerStatsDatabase
     }
     public PlayerStats GetPlayerStats(string nameOfUser)
     {
-        if (_players.TryGetValue(nameOfUser, out PlayerStats? stats))
+        if (_players.TryGetValue(nameOfUser.ToLower(), out PlayerStats? stats))
         {
             return stats;
-        }   
+        }       
             PlayerStats newPerson = new PlayerStats();
             
-            _players.Add (nameOfUser, newPerson);
+            _players.Add (nameOfUser.ToLower(), newPerson);
 
         return newPerson;
-    }
+    }   
 
     const string path = "playerStats.json";
     private void SaveChanges()
@@ -53,5 +54,11 @@ internal class PlayerStatsDatabase
         }       
 
         return new Dictionary<string, PlayerStats>();
+
     }
-}
+
+    public IEnumerable<(string Name, PlayerStats Stats)> GetAllStats()
+    {
+        return _players.Select(x => (x.Key, x.Value));
+    }
+}   
