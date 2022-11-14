@@ -1,6 +1,7 @@
 ﻿using _21an;
 using System.IO;
 using System.Text.Json;
+using static System.Net.Mime.MediaTypeNames;
 
 internal class PlayerStatsDatabase
 {
@@ -60,5 +61,5 @@ internal class PlayerStatsDatabase
     public IEnumerable<(string Name, PlayerStats Stats)> GetAllStats()
     {
         return _players.Select(x => (x.Key, x.Value));
-    }
-}   
+    } 
+}
