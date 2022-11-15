@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using static Terminal.Gui.Graphs.BarSeries;
@@ -17,17 +18,11 @@ namespace _21an
         {
             if (IsCardUsed())
             {
-                return SavedCard();
+                //ta ett nytt kort
             }
-            else return false;
+            //kortet kan tas
         }
 
-        private int RandomCard()
-        {
-            Random random = new Random();
-            int randomCard = random.Next(0, 13);
-            return randomCard;
-        }
         private int RandomCardColor()
         {
             Random random = new Random();
@@ -66,10 +61,9 @@ namespace _21an
             return CardColor[RandomCardColor()];
         }
 
-        private string SavedCard()
+        public string SavedCard()
         {
-            Random random = new Random();
-            int randomCard = (int)CardValue(Random.Next(random));
+            
         }   
 
         private bool IsCardUsed()
