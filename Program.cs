@@ -23,27 +23,19 @@ public class Program
 
         }
     }
-    
+
     public static bool Play21()
     {
-        Random rnd = new Random();
-        Cards card = new Cards();
-
-        T RandomEnumValue<T>()
-        {
-            var v = CardValue.GetValues(typeof(T));
-            
-        }
-        var savedCard = (T)v.GetValue(rnd.Next(v.Length));
-
+        Deck deck = new Deck();
         Console.Clear();
-        int userFirstCard = GetRandomCardValue();
-        int userSecondCard = GetRandomCardValue();
-        int computerFirstCard = GetRandomCardValue();
-        int computerSecondCard = GetRandomCardValue();
 
-        int userScore = userFirstCard + userSecondCard;
-        int computerScore = computerFirstCard + computerSecondCard;
+        var userFirstCard = deck.Draw();
+        var userSecondCard = deck.Draw();
+        var computerFirstCard = deck.Draw();
+        var computerSecondCard = deck.Draw();
+
+        var userScore = userFirstCard.Value + userSecondCard.Value;
+        var computerScore = computerFirstCard.Value + computerSecondCard.Value;
 
         if (userFirstCard != userSecondCard)
         {
