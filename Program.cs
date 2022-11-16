@@ -220,13 +220,12 @@ public class Program
         string nameOfUser;
 
 
-        //deztta är endast debug tester så jag kan få det i play21() metoden att funka sen.
+        //detta är endast debug tester så jag kan få det i play21() metoden att funka sen.
         Deck d = new Deck();
 
         var h = d.Draw();
         var g = d.Draw();
 
-        var gh = g + h;
         var e = d.Draw().Value;
 
         /*while (true)

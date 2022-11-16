@@ -39,7 +39,7 @@ namespace _21an
 
             return card;
         }
-        }
+    }
 
         public class Card
         {
@@ -58,6 +58,7 @@ namespace _21an
         }
     }
 
+    [Flags]
     public enum CardValue 
     {
         ess = 1,
