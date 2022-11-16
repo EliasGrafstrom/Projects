@@ -24,19 +24,20 @@ public class Program
         }
     }
 
-    public static bool Play21()
+    /*public static bool Play21()
     {
         Deck deck = new Deck();
         Console.Clear();
 
+    
         var userFirstCard = deck.Draw();
         var userSecondCard = deck.Draw();
         var computerFirstCard = deck.Draw();
         var computerSecondCard = deck.Draw();
 
-        var userScore = userFirstCard.Value + userSecondCard.Value;
-        var computerScore = computerFirstCard.Value + computerSecondCard.Value;
-
+        var userScore = userFirstCard + userSecondCard;
+        var computerScore = computerFirstCard + computerSecondCard;
+            
         if (userFirstCard != userSecondCard)
         {
             AnsiConsole.MarkupLine($"Dina kort är värda [chartreuse3_1]{userFirstCard}[/] och [chartreuse3_1]{userSecondCard}[/]. Du har [chartreuse3_1]{userScore}[/] poäng.");
@@ -142,7 +143,7 @@ public class Program
         {
             return false;
         }
-    }
+    }*/
 
     
 
@@ -217,7 +218,18 @@ public class Program
     {
         string lastWinner = string.Empty;
         string nameOfUser;
-        while (true)
+
+
+        //deztta är endast debug tester så jag kan få det i play21() metoden att funka sen.
+        Deck d = new Deck();
+
+        var h = d.Draw();
+        var g = d.Draw();
+
+        var gh = g + h;
+        var e = d.Draw().Value;
+
+        /*while (true)
         {         
             Console.Clear();
             AnsiConsole.MarkupLine("[dodgerblue1]  Välkommen till[/] [deepskyblue2]21an![/]");
@@ -276,6 +288,6 @@ public class Program
                 case "6":
                     return;     
             }
-        }
+        }*/
     }
 }

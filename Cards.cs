@@ -39,10 +39,10 @@ namespace _21an
 
             return card;
         }
-    }
+        }
 
-    public class Card
-    {
+        public class Card
+        {
         public CardValue Value { get; }
         public CardSuite Suite { get; }
 
