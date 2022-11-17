@@ -5,6 +5,15 @@
 
     public override string ToString()
     {
-        return ($"\nAntal Matcher: {Matches} \nAntal Vunna Matcher: {Wins}");
+        return ($"\nAntal Matcher: {Matches} \nAntal Vunna Matcher: {Wins}n\") + {WinPercentage()};
+    }
+
+    public string WinPercentage()
+    {
+        int wins = Wins;
+        int matches = Matches;
+
+        double winPercentage = (wins / matches) * 100;
+        return ($"Procentuellt antal vunna matcher: {winPercentage}");
     }
 }
