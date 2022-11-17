@@ -190,7 +190,7 @@ public class Program
         Console.Clear();
         Console.WriteLine("");
         Console.WriteLine("Spelet går ut på att man tar kort tills du har 21, eller så nära som möjligt, men inte mer.");
-        Console.WriteLine("Ess är värt 1 poäng, knekt 11, dam 12 och kung 13.");
+        Console.WriteLine("Ess är värt 1 poäng, knekt, dam och kung är alla värda 10 poäng.");
         ReturnToMenu();
     }
 
@@ -250,7 +250,7 @@ public class Program
                 case "2":
                     Console.Clear();
                     Console.WriteLine("");
-                    AnsiConsole.MarkupLine($"Senaste vinnaren var [darkgoldenrod]{lastWinner}[/].");
+                    AnsiConsole.MarkupLine($"Senaste vinnaren var [darkgoldenrod]{lastWinner.FirstCharToUpper()}[/].");
                     ReturnToMenu();
                     break;
                 case "3":
