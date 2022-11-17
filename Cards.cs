@@ -31,7 +31,7 @@ namespace _21an
 
         public Card Draw()
         {
-            var random = new Random(); 
+            var random = new Random();
             var randomCardIndex = random.Next(0, _cards.Count);
 
             var card = _cards[randomCardIndex];
@@ -41,8 +41,8 @@ namespace _21an
         }
     }
 
-        public class Card
-        {
+    public class Card
+    {
         public CardValue Value { get; }
         public CardSuite Suite { get; }
 
@@ -58,8 +58,7 @@ namespace _21an
         }
     }
 
-    [Flags]
-    public enum CardValue 
+    public enum CardValue
     {
         ess = 1,
         två = 2,
@@ -71,9 +70,9 @@ namespace _21an
         åtta = 8,
         nio = 9,
         tio = 10,
-        knekt = 11,
-        dam = 12,
-        kung = 13
+        knekt = 10,
+        dam = 10,
+        kung = 10
     }
 
     public enum CardSuite
@@ -88,15 +87,6 @@ namespace _21an
     {
         string? Name { get; set; }
         int? Points { get; set; }
-        
-        //public object GetCard(CardValue savedCard)
-        //{
-          //  if (IsCardUsed())
-           // {
-                //slumpa ett nytt kort
-          //  }
-            //kortet kan tas
-        //}
 
         private int RandomCardColor()
         {
@@ -116,23 +106,5 @@ namespace _21an
             };
             return CardColor[RandomCardColor()];
         }
-
-        //public string SavedCard()
-        //{
-        //    
-        //}   
-
-       /* private bool IsCardUsed()
-        {
-            string[] ExistingCards = {};
-
-            if (ExistingCards.Any(SavedCard().Contains))
-            {
-                return false;   
-            }
-            ExistingCards = new List<string>(ExistingCards) { SavedCard() }.ToArray();
-            
-            return true;
-        }*/
     }
 }

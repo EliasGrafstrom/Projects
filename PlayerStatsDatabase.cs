@@ -53,9 +53,7 @@ internal class PlayerStatsDatabase
             var jsonToDictionary = JsonSerializer.Deserialize<Dictionary<string, PlayerStats>>(File.ReadAllText(path));
             return jsonToDictionary; 
         }       
-
         return new Dictionary<string, PlayerStats>();
-
     }
 
     public IEnumerable<(string Name, PlayerStats Stats)> GetAllStats()
