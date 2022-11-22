@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using Spectre.Console;
 using static _21an.Cards;
 using Terminal.Gui;
+using System.Reflection.Metadata;
 
 public class Program
 {
@@ -26,6 +27,7 @@ public class Program
 
     public static bool Play21()
     {
+        PlayerCredits credits = new PlayerCredits();
         Deck deck = new Deck();
         Console.Clear();
 
@@ -208,11 +210,10 @@ public class Program
         string inputName = Console.ReadLine().ToLower();
         return inputName;
     }
-
-
+    
     public static void Main()
     {
-        string lastWinner = String.Empty;
+        string lastWinner = "Ingen har vunnit ännu.";
         string nameOfUser;
         while (true)
         {
