@@ -3,7 +3,6 @@ using System.Runtime.InteropServices;
 using Spectre.Console;
 using static _21an.Cards;
 using Terminal.Gui;
-using System.Reflection.Metadata;
 
 public class Program
 {
@@ -25,11 +24,14 @@ public class Program
         }
     }
 
-    public static bool Play21()
+    public static bool Play21(string nameOfUser)
     {
-        PlayerCredits credits = new PlayerCredits();
+        playerCurrency currency = new playerCurrency();
+
         Deck deck = new Deck();
         Console.Clear();
+
+        currency.MakeBet();
 
         var userFirstCard = deck.Draw();
         var userSecondCard = deck.Draw();
@@ -147,8 +149,6 @@ public class Program
         }
     }
 
-
-
     private static string GetName()
     {
         do
@@ -192,7 +192,7 @@ public class Program
         Console.Clear();
         Console.WriteLine("");
         Console.WriteLine("Spelet går ut på att man tar kort tills du har 21, eller så nära som möjligt, men inte mer.");
-        Console.WriteLine("Ess är värt 1 poäng, knekt, dam och kung är alla värda 10 poäng.");
+        Console.WriteLine("Ess är värt 1 poäng, knekt 11, dam 12 och kung 13.");
         ReturnToMenu();
     }
 
@@ -210,10 +210,11 @@ public class Program
         string inputName = Console.ReadLine().ToLower();
         return inputName;
     }
-    
+
+
     public static void Main()
     {
-        string lastWinner = "Ingen har vunnit ännu.";
+        string lastWinner = String.Empty;
         string nameOfUser;
         while (true)
         {
@@ -235,7 +236,7 @@ public class Program
             {
                 case "1":
                     nameOfUser = GetName();
-                    if (Play21())
+                    if (Play21(nameOfUser))
                     {
                         playerStatsDatabase.RecordPlayerWin(nameOfUser);
                         lastWinner = nameOfUser;
@@ -251,7 +252,7 @@ public class Program
                 case "2":
                     Console.Clear();
                     Console.WriteLine("");
-                    AnsiConsole.MarkupLine($"Senaste vinnaren var [darkgoldenrod]{lastWinner.FirstCharToUpper()}[/].");
+                    AnsiConsole.MarkupLine($"Senaste vinnaren var [darkgoldenrod]{lastWinner}[/].");
                     ReturnToMenu();
                     break;
                 case "3":

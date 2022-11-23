@@ -3,20 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Terminal.Gui;
 
 namespace _21an
 {
-    internal class PlayerCredits
+    internal class playerCurrency
     {
-        public int CurrentCredits { get; set; }
-        public int BettedCredits { get; set; }
-
-
-        PlayerStatsDatabase stats = new PlayerStatsDatabase();
-        private void GetUSerCredits()
+        PlayerStatsDatabase playerStatsDataBase = new PlayerStatsDatabase();
+        public int GetUserMoney(string userName, int userBet)
         {
-            
+            var r = playerStatsDataBase.GetPlayerStats(userName);
+
+            if (r == null)
+            {
+                return 500;
+            }
+
+        }
+
+        internal int MakeBet()
+        {
+            Console.WriteLine($"Hur mycket vill du betta? Du har {GetUserMoney} credits.");
+            int userBet;
+            while (!int.TryParse(Console.ReadLine(), out userBet))
+            {
+                Console.WriteLine("Ange ett heltal.");
+            }
+            return userBet;
         }
     }
 }
