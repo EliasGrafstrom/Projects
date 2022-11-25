@@ -10,6 +10,7 @@
 
     public string WinPercentage()
     {
+        // Här kan du skippa 
         double wins = Wins;
         double matches = Matches;
 

@@ -27,11 +27,12 @@ public class Program
     public static bool Play21(string nameOfUser)
     {
         playerCurrency currency = new playerCurrency();
-
+        
         Deck deck = new Deck();
         Console.Clear();
 
-        currency.MakeBet();
+        int bet = currency.MakeBet();
+        currency.GetUserMoney(nameOfUser, bet);
 
         var userFirstCard = deck.Draw();
         var userSecondCard = deck.Draw();
@@ -214,8 +215,14 @@ public class Program
 
     public static void Main()
     {
+        playerCurrency credits = new playerCurrency();
+        int userBet = 2;
+        string name = "Hampus";
+        var f = credits.GetUserMoney(name, userBet);
+        Console.WriteLine(f);
+
         string lastWinner = String.Empty;
-        string nameOfUser;
+        string nameOfUser; 
         while (true)
         {
             Console.Clear();

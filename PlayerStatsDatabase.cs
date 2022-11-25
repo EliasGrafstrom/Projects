@@ -57,11 +57,10 @@ internal class PlayerStatsDatabase
         }
 
         return new Dictionary<string, PlayerStats>();
-
     }
 
     public IEnumerable<(string Name, PlayerStats Stats)> GetAllStats()
     {
         return _players.Select(x => (x.Key, x.Value));
     }
-}
+}   
