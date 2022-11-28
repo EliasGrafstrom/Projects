@@ -2,10 +2,10 @@
 {
     public int Wins { get; set; }
     public int Matches { get; set; }
-
+    public int Credits { get; set; }
     public override string ToString()
     {
-        return ($"\nAntal Matcher: {Matches} \nAntal Vunna Matcher: {Wins}\n{WinPercentage()}");
+        return ($"\nAntal Matcher: {Matches} \nAntal Vunna Matcher: {Wins}\n{WinPercentage()} \nAntal Credits: {Credits}");
     }
 
     public string WinPercentage()

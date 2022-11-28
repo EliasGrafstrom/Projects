@@ -30,9 +30,8 @@ public class Program
         
         Deck deck = new Deck();
         Console.Clear();
-
-        int bet = currency.MakeBet();
-        currency.GetUserMoney(nameOfUser, bet);
+        var userBet = currency.MakeBet(nameOfUser);
+        var userMoney = currency.GetUserMoney(nameOfUser);
 
         var userFirstCard = deck.Draw();
         var userSecondCard = deck.Draw();
@@ -215,12 +214,6 @@ public class Program
 
     public static void Main()
     {
-        playerCurrency credits = new playerCurrency();
-        int userBet = 2;
-        string name = "Hampus";
-        var f = credits.GetUserMoney(name, userBet);
-        Console.WriteLine(f);
-
         string lastWinner = String.Empty;
         string nameOfUser; 
         while (true)

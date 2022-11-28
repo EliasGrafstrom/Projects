@@ -10,28 +10,23 @@ using System.Threading.Tasks;
 namespace _21an
 {
     internal class playerCurrency
-    { 
+    {
+        CreditsProfiles creditsProfile = new CreditsProfiles();
         PlayerStatsDatabase playerStatsDataBase = new PlayerStatsDatabase();
-        public object GetUserMoney(string userName, int userBet)
+        public object GetUserMoney(string userName)
         {
             var r = playerStatsDataBase.GetPlayerStats(userName);
 
             if (r == null)
             {
-                CreditsProfiles creditsProfile = new CreditsProfiles(userName, 500);
+                //creates new user with the name of the user, and the standard credits amount
             }
-            //creates new user with the name of the user, and the standard credits amount
-            foreach ()
-            {
-                //för varje element i credits-databasen ska namn kollas. när rätt namn har hittats
-                //så ska creditsen tas hit, och returneras.
-            }
-            //Seraches the CreditsProfile class for the right username and uses their credits.
+            return creditsProfile.ReturnUserCredits(userName);
         }
 
-        internal int MakeBet()
+        internal int MakeBet(string userName)
         {
-            Console.WriteLine($"Hur mycket vill du betta? Du har GetUserMoney credits.");
+            Console.WriteLine($"Hur mycket vill du betta? Du har {creditsProfile.ReturnUserCredits(userName)} credits.");
             int userBet;
             while (!int.TryParse(Console.ReadLine(), out userBet))
             {
