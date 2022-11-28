@@ -20,19 +20,13 @@ public class Program
             {
                 return false;
             }
-
         }
     }
 
-    public static bool Play21(string nameOfUser)
+    public static bool Play21()
     {
-        playerCurrency currency = new playerCurrency();
-        
         Deck deck = new Deck();
         Console.Clear();
-        var userBet = currency.MakeBet(nameOfUser);
-        var userMoney = currency.GetUserMoney(nameOfUser);
-
         var userFirstCard = deck.Draw();
         var userSecondCard = deck.Draw();
         var computerFirstCard = deck.Draw();
@@ -211,11 +205,11 @@ public class Program
         return inputName;
     }
 
-
     public static void Main()
     {
+        PlayerStatsDatabase playerStats = new PlayerStatsDatabase();
         string lastWinner = String.Empty;
-        string nameOfUser; 
+        string nameOfUser;
         while (true)
         {
             Console.Clear();
@@ -230,22 +224,24 @@ public class Program
             AnsiConsole.MarkupLine("[darkgoldenrod]  6.[/] Avsluta Spelet");
             string? userInput = Console.ReadLine();
 
-            PlayerStatsDatabase playerStatsDatabase = new PlayerStatsDatabase();
-
             switch (userInput)
             {
                 case "1":
                     nameOfUser = GetName();
-                    if (Play21(nameOfUser))
+                    playerCurrency currency = new playerCurrency();
+                    int userMoney = currency.GetUserMoney(nameOfUser);
+                    int userBet = currency.MakeBet(userMoney);
+
+                    if (Play21())
                     {
-                        playerStatsDatabase.RecordPlayerWin(nameOfUser);
-                        lastWinner = nameOfUser;
+                        playerStats.RecordPlayerWin(nameOfUser, userMoney, userBet);
+                        lastWinner = nameOfUser;                    
                         Console.Clear();
                     }
                     else
                     {
-                        playerStatsDatabase.RecordPlayerLoss(nameOfUser);
-                        lastWinner = "Datorn";
+                        playerStats.RecordPlayerLoss(nameOfUser, userMoney, userBet);
+                        lastWinner = "Datorn";                       
                         Console.Clear();
                     }
                     break;
@@ -260,13 +256,13 @@ public class Program
                     break;
                 case "4":
                     string userName = SearchStatistics().FirstCharToUpper();
-                    var statisticsResult = playerStatsDatabase.GetPlayerStats(userName);
+                    var statisticsResult = playerStats.GetPlayerStats(userName);
                     Console.WriteLine($"Spelare: {userName} {statisticsResult}");
                     ReturnToMenu();
                     break;
                 case "5":
                     Console.Clear();
-                    foreach (var user in playerStatsDatabase.GetAllStats())
+                    foreach (var user in playerStats.GetAllStats())
                     {
                         Console.WriteLine($"{user.Name.FirstCharToUpper()} {user.Stats}\n");
                     }

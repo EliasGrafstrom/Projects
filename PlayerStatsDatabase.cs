@@ -6,27 +6,27 @@ using static System.Net.Mime.MediaTypeNames;
 
 internal class PlayerStatsDatabase
 {
-    playerCurrency playerCurrency = new playerCurrency();
     private Dictionary<string, PlayerStats> _players;
 
     public PlayerStatsDatabase()
     {
         _players = InitializePlayerStats();
     }
-    internal void RecordPlayerLoss(string nameOfUser)
+    internal void RecordPlayerLoss(string nameOfUser, int userMoney, int userBet)
     {
         var playerStats = GetPlayerStats(nameOfUser);
         playerStats.Matches++;
+        playerStats.Credits = userMoney -= userBet;
         SaveChanges();
     }
 
-    internal void RecordPlayerWin(string nameOfUser)
+    internal void RecordPlayerWin(string nameOfUser, int userMoney, int userBet)
     {
         var playerStats = GetPlayerStats(nameOfUser);
         playerStats.Matches++;
         playerStats.Wins++;
+        playerStats.Credits = userMoney += userBet;
         SaveChanges();
-
     }
     public PlayerStats GetPlayerStats(string nameOfUser)
     {

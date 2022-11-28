@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.AccessControl;
 using System.Text;
 using System.Text.Json;
@@ -13,26 +14,33 @@ namespace _21an
     {
         CreditsProfiles creditsProfile = new CreditsProfiles();
         PlayerStatsDatabase playerStatsDataBase = new PlayerStatsDatabase();
-        public object GetUserMoney(string userName)
+        public int GetUserMoney(string userName)
         {
             var r = playerStatsDataBase.GetPlayerStats(userName);
 
-            if (r == null)
+            if (r.Matches == 0)
             {
-                //creates new user with the name of the user, and the standard credits amount
+                var newPerson = playerStatsDataBase.GetPlayerStats(userName);
+                int result =  newPerson.Credits = 500;
+                return result;
             }
+            //if person doesn't exist, create person and give them credits.
             return creditsProfile.ReturnUserCredits(userName);
         }
 
-        internal int MakeBet(string userName)
+        internal int MakeBet(int userMoney)
         {
-            Console.WriteLine($"Hur mycket vill du betta? Du har {creditsProfile.ReturnUserCredits(userName)} credits.");
+            Console.WriteLine($"Hur mycket vill du betta? Du har {userMoney} credits.");
+
             int userBet;
             while (!int.TryParse(Console.ReadLine(), out userBet))
             {
                 Console.WriteLine("Ange ett heltal.");
             }
-            return userBet;
+            do
+            {
+                return userBet;
+            } while (userBet <= userMoney);
         }
     }
 }
