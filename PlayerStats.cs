@@ -10,10 +10,8 @@
 
     public string WinPercentage()
     {
-        // Här kan du skippa 
         double wins = Wins;
         double matches = Matches;
-
         double winPercentage = (wins / matches) * 100;
         int winPercentageInt = Convert.ToInt32(winPercentage);
         return ($"Procentuellt antal vunna matcher: {winPercentageInt}%");

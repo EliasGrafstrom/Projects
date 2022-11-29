@@ -30,17 +30,23 @@ namespace _21an
 
         internal int MakeBet(int userMoney)
         {
-            Console.WriteLine($"Hur mycket vill du betta? Du har {userMoney} credits.");
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine($"Hur mycket vill du betta? Du har {userMoney} credits.");
 
-            int userBet;
-            while (!int.TryParse(Console.ReadLine(), out userBet))
-            {
-                Console.WriteLine("Ange ett heltal.");
-            }
-            do
-            {
-                return userBet;
-            } while (userBet <= userMoney);
+                int userBet;
+                while (!int.TryParse(Console.ReadLine(), out userBet))
+                {
+                    Console.WriteLine("Ange ett heltal.");
+                }
+                while (userBet <= userMoney)
+                {
+                    return userBet;
+                }
+                Console.WriteLine("Du kan inte betta mer än vad du har. Tryck på vilken tangent som helst för att bekräfta.");
+                Console.ReadKey();
+            } 
         }
     }
 }

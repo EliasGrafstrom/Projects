@@ -75,7 +75,10 @@ public class Program
                 }
                 else if (userScore == 21)
                 {
+                    
                     AnsiConsole.MarkupLine("Grattis. Du har vunnit spelet då du fick [chartreuse3_1]21[/] poäng.");
+                    AnsiConsole.MarkupLine("Du får nu dubbla din betts credits då du fick exakt [chartreuse3_1]21 poäng[/]");
+                    DoubleScore();
                     ReturnToMenu();
                     return true;
                 }
@@ -143,6 +146,11 @@ public class Program
         }
     }
 
+    public static bool DoubleScore()
+    {
+        return true;
+    }
+
     private static string GetName()
     {
         do
@@ -171,7 +179,6 @@ public class Program
             {
                 Console.WriteLine("Är du säker? (ja/nej)");
             }
-
             if (UserInputIsYes())
             {
                 return userName;
@@ -187,10 +194,12 @@ public class Program
         Console.WriteLine("");
         Console.WriteLine("Spelet går ut på att man tar kort tills du har 21, eller så nära som möjligt, men inte mer.");
         Console.WriteLine("Ess är värt 1 poäng, knekt 11, dam 12 och kung 13.");
+        Console.WriteLine("Det du bettar dubblas om du vinner, om du förlorar så förlorar du det som du bettat.");
+        Console.WriteLine("Du får 10 poäng för varje match du förlorar, så du inte fastnar på 0 poäng.");
         ReturnToMenu();
     }
 
-    private static void ReturnToMenu()
+    internal static void ReturnToMenu()
     {
         Console.WriteLine("");
         AnsiConsole.MarkupLine("[darkgoldenrod]   Tryck på vilken tangent som helst för att gå tillbaka.[/]");

@@ -7,7 +7,6 @@ using static System.Net.Mime.MediaTypeNames;
 internal class PlayerStatsDatabase
 {
     private Dictionary<string, PlayerStats> _players;
-
     public PlayerStatsDatabase()
     {
         _players = InitializePlayerStats();
@@ -16,7 +15,7 @@ internal class PlayerStatsDatabase
     {
         var playerStats = GetPlayerStats(nameOfUser);
         playerStats.Matches++;
-        playerStats.Credits = userMoney -= userBet;
+        playerStats.Credits = userMoney -= userBet - 10;
         SaveChanges();
     }
 
@@ -25,6 +24,14 @@ internal class PlayerStatsDatabase
         var playerStats = GetPlayerStats(nameOfUser);
         playerStats.Matches++;
         playerStats.Wins++;
+        if (Program.DoubleScore())
+        {
+            playerStats.Credits = userMoney + 2 * userBet;
+        }
+        else
+        {
+            playerStats.Credits = userMoney + userBet;
+        }
         playerStats.Credits = userMoney += userBet;
         SaveChanges();
     }
