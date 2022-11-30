@@ -77,8 +77,7 @@ public class Program
                 {
                     
                     AnsiConsole.MarkupLine("Grattis. Du har vunnit spelet då du fick [chartreuse3_1]21[/] poäng.");
-                    AnsiConsole.MarkupLine("Du får nu dubbla din betts credits då du fick exakt [chartreuse3_1]21 poäng[/]");
-                    DoubleScore();
+                    AnsiConsole.MarkupLine("Du får nu dubbla din betts credits.");
                     ReturnToMenu();
                     return true;
                 }
@@ -145,12 +144,6 @@ public class Program
             return false;
         }
     }
-
-    public static bool DoubleScore()
-    {
-        return true;
-    }
-
     private static string GetName()
     {
         do

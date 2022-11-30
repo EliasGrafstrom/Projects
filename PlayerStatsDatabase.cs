@@ -17,24 +17,16 @@ internal class PlayerStatsDatabase
         playerStats.Matches++;
         playerStats.Credits = userMoney -= userBet - 10;
         SaveChanges();
-    }
+    } //records player loss
 
     internal void RecordPlayerWin(string nameOfUser, int userMoney, int userBet)
     {
         var playerStats = GetPlayerStats(nameOfUser);
         playerStats.Matches++;
         playerStats.Wins++;
-        if (Program.DoubleScore())
-        {
-            playerStats.Credits = userMoney + 2 * userBet;
-        }
-        else
-        {
-            playerStats.Credits = userMoney + userBet;
-        }
-        playerStats.Credits = userMoney += userBet;
+        playerStats.Credits = userMoney + userBet;
         SaveChanges();
-    }
+    } //records player win
     public PlayerStats GetPlayerStats(string nameOfUser)
     {
         if (_players.TryGetValue(nameOfUser.ToLower(), out PlayerStats? stats))
@@ -46,14 +38,15 @@ internal class PlayerStatsDatabase
         _players.Add(nameOfUser.ToLower(), newPerson);
 
         return newPerson;
-    }
+    } //returns the stats of a person, if the person doesn't exist, it creates a new person in the _players dictionary.
+
 
     const string path = "playerStats.json";
     private void SaveChanges()
     {
         var jsonToWrite = JsonSerializer.Serialize(_players);
         File.WriteAllText(path, jsonToWrite);
-    }
+    } //saves the stats and sends it to the json file.
 
     private Dictionary<string, PlayerStats> InitializePlayerStats()
     {
