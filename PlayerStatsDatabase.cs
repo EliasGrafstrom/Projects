@@ -9,7 +9,7 @@ internal class PlayerStatsDatabase
     private Dictionary<string, PlayerStats> _players;
     public PlayerStatsDatabase()
     {
-        _players = InitializePlayerStats();
+        _players = LoadPlayerStatsFromFile();
     }
     internal void RecordPlayerLoss(string nameOfUser, int userMoney, int userBet)
     {
@@ -48,7 +48,7 @@ internal class PlayerStatsDatabase
         File.WriteAllText(path, jsonToWrite);
     } //saves the stats and sends it to the json file.
 
-    private Dictionary<string, PlayerStats> InitializePlayerStats()
+    private Dictionary<string, PlayerStats> LoadPlayerStatsFromFile()
     {
         if (File.Exists(path))
         {

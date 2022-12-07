@@ -1,5 +1,4 @@
 ﻿using _21an;
-using System.Runtime.InteropServices;
 using Spectre.Console;
 using static _21an.Cards;
 using Terminal.Gui;
@@ -23,10 +22,50 @@ public class Program
         }
     }
 
+    static object CheckForWinnerOrGivePCCard(int computerScore, int newPCCardValue, ref Card newPCCard)
+    {
+        if (computerScore > 21)
+        {
+            AnsiConsole.MarkupLine($"Du vann! Grattis. Datorn fick [chartreuse3_1]{computerScore}[/], vilket är mer än [chartreuse3_1]21[/].");
+            ReturnToMenu();
+            return true;
+        }
+
+        else if (computerScore == 21)
+        {
+            AnsiConsole.MarkupLine($"Datorn plockade upp kortet [chartreuse3_1]{newPCCardValue}[/]. Datorn har nu [chartreuse3_1]21[/] poäng, och vann därför.");
+            ReturnToMenu();
+            return false;
+        }
+
+        else
+        {
+            computerScore += newPCCardValue;
+            AnsiConsole.MarkupLine($"Datorn plockade upp kortet [chartreuse3_1]{newPCCard}[/]. Datorn har nu [chartreuse3_1]{computerScore}[/] poäng.");
+            return computerScore;
+        }
+    }
+
+    static void DrawCardsAndAsk(int userFirstValue, int userSecondValue, int computerFirstValue, int computerSecondValue, int userScore, int computerScore)
+    {
+        if (userFirstValue != userSecondValue)
+        {
+            AnsiConsole.MarkupLine($"Du fick korten [chartreuse3_1]{userFirstValue}[/] och [chartreuse3_1]{userSecondValue}[/]. Du har [chartreuse3_1]{userScore}[/] poäng.");
+        }
+
+        if (computerFirstValue != computerSecondValue)
+        {
+            AnsiConsole.MarkupLine($"Datorn fick korten [chartreuse3_1]{computerFirstValue}[/] och [chartreuse3_1]{computerSecondValue}[/]. Datorn har nu [chartreuse3_1]{computerScore}[/] poäng.");
+        }
+
+        AnsiConsole.MarkupLine($"Vill du ta ett till kort? [mediumspringgreen](ja/nej)[/]");
+    }
+
     public static bool Play21()
     {
-        Deck deck = new Deck();
         Console.Clear();
+        Deck deck = new Deck();
+
         var userFirstCard = deck.Draw();
         var userSecondCard = deck.Draw();
         var computerFirstCard = deck.Draw();
@@ -40,17 +79,8 @@ public class Program
         int userScore = userFirstValue + userSecondValue;
         int computerScore = computerFirstValue + computerSecondValue;
 
-        if (userFirstCard != userSecondCard)
-        {
-            AnsiConsole.MarkupLine($"Du fick korten [chartreuse3_1]{userFirstCard}[/] och [chartreuse3_1]{userSecondCard}[/]. Du har [chartreuse3_1]{userScore}[/] poäng.");
-        }
-
-        if (computerFirstCard != computerSecondCard)
-        {
-            AnsiConsole.MarkupLine($"Datorn fick korten [chartreuse3_1]{computerFirstCard}[/] och [chartreuse3_1]{computerSecondCard}[/]. Datorn har nu [chartreuse3_1]{computerScore}[/] poäng.");
-        }
-
-        AnsiConsole.MarkupLine($"Vill du ta ett till kort? [mediumspringgreen](ja/nej)[/]");
+        DrawCardsAndAsk(userFirstValue, userSecondValue, computerFirstValue, computerSecondValue, userScore, computerScore);
+        
         while (UserInputIsYes())
         {
             Console.Clear();
@@ -75,9 +105,8 @@ public class Program
                 }
                 else if (userScore == 21)
                 {
-                    
+
                     AnsiConsole.MarkupLine("Grattis. Du har vunnit spelet då du fick [chartreuse3_1]21[/] poäng.");
-                    AnsiConsole.MarkupLine("Du får nu dubbla din betts credits.");
                     ReturnToMenu();
                     return true;
                 }
@@ -92,31 +121,14 @@ public class Program
             var newPCCard = deck.Draw();
             int newPCCardValue = (int)newPCCard.Value;
 
-            if (computerScore > 21)
-            {
-                AnsiConsole.MarkupLine($"Du vann! Grattis. Datorn fick [chartreuse3_1]{computerScore}[/], vilket är mer än [chartreuse3_1]21[/].");
-                ReturnToMenu();
-                return true;
-            }
-
-            else if (computerScore == 21)
-            {
-                AnsiConsole.MarkupLine($"Datorn plockade upp kortet [chartreuse3_1]{newPCCardValue}[/]. Datorn har nu [chartreuse3_1]{computerScore}[/] poäng, och vann därför.");
-                ReturnToMenu();
-                return false;
-            }
-
-            else
-            {
-                computerScore += newPCCardValue;
-                AnsiConsole.MarkupLine($"Datorn plockade upp kortet [chartreuse3_1]{newPCCard}[/]. Datorn har nu [chartreuse3_1]{computerScore}[/] poäng.");
-            }
+            if ((bool)CheckForWinnerOrGivePCCard(computerScore, newPCCardValue, ref newPCCard)) ? true : false;
+            
 
             if (noDelay == 1)
             {
                 Thread.Sleep(1300);
                 noDelay++;
-            }
+            }   
         }
 
         if (computerScore > 21)
@@ -144,9 +156,9 @@ public class Program
             return false;
         }
     }
-    private static string GetName()
+    private static string InputName()
     {
-        do
+        while (true)
         {
             string? userName;
             Console.Clear();
@@ -176,9 +188,58 @@ public class Program
             {
                 return userName;
             }
-
         }
-        while (true);
+    }
+
+    private static void Menu(string userInput, string nameOfUser, string lastWinner, ref PlayerStatsDatabase playerStats)
+    {
+        switch (userInput)
+        {
+            case "1":
+                nameOfUser = InputName();
+                playerCurrency currency = new playerCurrency();
+                int userMoney = currency.GetUserMoney(nameOfUser);
+                int userBet = currency.MakeBet(userMoney);
+
+                if (Play21())
+                {
+                    playerStats.RecordPlayerWin(nameOfUser, userMoney, userBet);
+                    lastWinner = nameOfUser;
+                    Console.Clear();
+                }
+                else
+                {
+                    playerStats.RecordPlayerLoss(nameOfUser, userMoney, userBet);
+                    lastWinner = "Datorn";
+                    Console.Clear();
+                }
+                break;
+            case "2":
+                Console.Clear();
+                Console.WriteLine("");
+                AnsiConsole.MarkupLine($"Senaste vinnaren var [darkgoldenrod]{lastWinner}[/].");
+                ReturnToMenu();
+                break;
+            case "3":
+                Play21Rules();
+                break;
+            case "4":
+                string userName = SearchStatistics().FirstCharToUpper();
+                var statisticsResult = playerStats.GetPlayerStats(userName);
+                Console.WriteLine($"Spelare: {userName} {statisticsResult}");
+                ReturnToMenu();
+                break;
+            case "5":
+                Console.Clear();
+                foreach (var user in playerStats.GetAllStats())
+                {
+                    Console.WriteLine($"{user.Name.FirstCharToUpper()} {user.Stats}\n");
+                }
+                ReturnToMenu();
+                break;
+            case "6":
+                return;
+        }
     }
 
     private static void Play21Rules()
@@ -203,7 +264,7 @@ public class Program
     {
         Console.Clear();
         Console.Write("Skriv namnet du vill se statistik på: ");
-        string inputName = Console.ReadLine().ToLower();
+        string? inputName = Console.ReadLine().ToLower();
         return inputName;
     }
 
@@ -211,7 +272,7 @@ public class Program
     {
         PlayerStatsDatabase playerStats = new PlayerStatsDatabase();
         string lastWinner = String.Empty;
-        string nameOfUser;
+        string nameOfUser = String.Empty;
         while (true)
         {
             Console.Clear();
@@ -226,53 +287,8 @@ public class Program
             AnsiConsole.MarkupLine("[darkgoldenrod]  6.[/] Avsluta Spelet");
             string? userInput = Console.ReadLine();
 
-            switch (userInput)
-            {
-                case "1":
-                    nameOfUser = GetName();
-                    playerCurrency currency = new playerCurrency();
-                    int userMoney = currency.GetUserMoney(nameOfUser);
-                    int userBet = currency.MakeBet(userMoney);
-
-                    if (Play21())
-                    {
-                        playerStats.RecordPlayerWin(nameOfUser, userMoney, userBet);
-                        lastWinner = nameOfUser;                    
-                        Console.Clear();
-                    }
-                    else
-                    {
-                        playerStats.RecordPlayerLoss(nameOfUser, userMoney, userBet);
-                        lastWinner = "Datorn";                       
-                        Console.Clear();
-                    }
-                    break;
-                case "2":
-                    Console.Clear();
-                    Console.WriteLine("");
-                    AnsiConsole.MarkupLine($"Senaste vinnaren var [darkgoldenrod]{lastWinner}[/].");
-                    ReturnToMenu();
-                    break;
-                case "3":
-                    Play21Rules();
-                    break;
-                case "4":
-                    string userName = SearchStatistics().FirstCharToUpper();
-                    var statisticsResult = playerStats.GetPlayerStats(userName);
-                    Console.WriteLine($"Spelare: {userName} {statisticsResult}");
-                    ReturnToMenu();
-                    break;
-                case "5":
-                    Console.Clear();
-                    foreach (var user in playerStats.GetAllStats())
-                    {
-                        Console.WriteLine($"{user.Name.FirstCharToUpper()} {user.Stats}\n");
-                    }
-                    ReturnToMenu();
-                    break;
-                case "6":
-                    return;
-            }
+            Menu(userInput, nameOfUser, lastWinner, ref playerStats);
         }
     }
 }
+
