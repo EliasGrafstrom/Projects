@@ -21,29 +21,23 @@ public class Program
             }
         }
     }
-
-    static object CheckForWinnerOrGivePCCard(int computerScore, int newPCCardValue, ref Card newPCCard)
+    private static object CheckForWinnerOrGivePCCard(int computerScore, int newPCCardValue, ref Card newPCCard)
     {
         if (computerScore > 21)
         {
             AnsiConsole.MarkupLine($"Du vann! Grattis. Datorn fick [chartreuse3_1]{computerScore}[/], vilket är mer än [chartreuse3_1]21[/].");
             ReturnToMenu();
-            return true;
         }
 
         else if (computerScore == 21)
         {
             AnsiConsole.MarkupLine($"Datorn plockade upp kortet [chartreuse3_1]{newPCCardValue}[/]. Datorn har nu [chartreuse3_1]21[/] poäng, och vann därför.");
             ReturnToMenu();
-            return false;
         }
+        computerScore += newPCCardValue;
+        AnsiConsole.MarkupLine($"Datorn plockade upp kortet [chartreuse3_1]{newPCCard}[/]. Datorn har nu [chartreuse3_1]{computerScore}[/] poäng.");
+        return computerScore;
 
-        else
-        {
-            computerScore += newPCCardValue;
-            AnsiConsole.MarkupLine($"Datorn plockade upp kortet [chartreuse3_1]{newPCCard}[/]. Datorn har nu [chartreuse3_1]{computerScore}[/] poäng.");
-            return computerScore;
-        }
     }
 
     static void DrawCardsAndAsk(int userFirstValue, int userSecondValue, int computerFirstValue, int computerSecondValue, int userScore, int computerScore)
@@ -52,12 +46,12 @@ public class Program
         {
             AnsiConsole.MarkupLine($"Du fick korten [chartreuse3_1]{userFirstValue}[/] och [chartreuse3_1]{userSecondValue}[/]. Du har [chartreuse3_1]{userScore}[/] poäng.");
         }
-
+    
         if (computerFirstValue != computerSecondValue)
         {
             AnsiConsole.MarkupLine($"Datorn fick korten [chartreuse3_1]{computerFirstValue}[/] och [chartreuse3_1]{computerSecondValue}[/]. Datorn har nu [chartreuse3_1]{computerScore}[/] poäng.");
         }
-
+       
         AnsiConsole.MarkupLine($"Vill du ta ett till kort? [mediumspringgreen](ja/nej)[/]");
     }
 
@@ -121,14 +115,23 @@ public class Program
             var newPCCard = deck.Draw();
             int newPCCardValue = (int)newPCCard.Value;
 
-            if ((bool)CheckForWinnerOrGivePCCard(computerScore, newPCCardValue, ref newPCCard)) ? true : false;
-            
+            var result = CheckForWinnerOrGivePCCard(computerScore, newPCCardValue, ref newPCCard);
+
+            if (Convert.ToBoolean(result))
+            {
+                return true;
+            }
+            else if (!Convert.ToBoolean(result))
+            {
+                return false;
+            }
+            else result = computerScore;
 
             if (noDelay == 1)
             {
                 Thread.Sleep(1300);
                 noDelay++;
-            }   
+            }
         }
 
         if (computerScore > 21)
@@ -258,6 +261,7 @@ public class Program
         Console.WriteLine("");
         AnsiConsole.MarkupLine("[darkgoldenrod]   Tryck på vilken tangent som helst för att gå tillbaka.[/]");
         Console.ReadKey();
+        
         Console.Clear();
     }
     private static string SearchStatistics()
