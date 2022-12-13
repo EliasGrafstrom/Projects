@@ -99,7 +99,6 @@ public class Program
                 }
                 else if (userScore == 21)
                 {
-
                     AnsiConsole.MarkupLine("Grattis. Du har vunnit spelet då du fick [chartreuse3_1]21[/] poäng.");
                     ReturnToMenu();
                     return true;
@@ -115,18 +114,24 @@ public class Program
             var newPCCard = deck.Draw();
             int newPCCardValue = (int)newPCCard.Value;
 
-            var result = CheckForWinnerOrGivePCCard(computerScore, newPCCardValue, ref newPCCard);
-
-            if (Convert.ToBoolean(result))
+            if (computerScore > 21)
             {
+                AnsiConsole.MarkupLine($"Du vann! Grattis. Datorn fick [chartreuse3_1]{computerScore}[/], vilket är mer än [chartreuse3_1]21[/].");
+                ReturnToMenu();
                 return true;
             }
-            else if (!Convert.ToBoolean(result))
+
+            else if (computerScore == 21)
             {
+                AnsiConsole.MarkupLine($"Datorn plockade upp kortet [chartreuse3_1]{newPCCardValue}[/]. Datorn har nu [chartreuse3_1]21[/] poäng, och vann därför.");
+                ReturnToMenu();
                 return false;
             }
-            else result = computerScore;
-
+            else
+            {
+                AnsiConsole.MarkupLine($"Datorn plockade upp kortet [chartreuse3_1]{newPCCard}[/]. Datorn har nu [chartreuse3_1]{computerScore}[/] poäng.");
+                computerScore += newPCCardValue;
+            }
             if (noDelay == 1)
             {
                 Thread.Sleep(1300);
