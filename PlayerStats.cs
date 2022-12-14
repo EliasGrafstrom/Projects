@@ -7,7 +7,7 @@
     {
         return ($"\nAntal Matcher: {Matches} \nAntal Vunna Matcher: {Wins}\n{WinPercentage()} \nAntal Credits: {Credits}");
     }
-
+    
     public string WinPercentage()
     {
         double wins = Wins;

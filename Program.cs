@@ -1,7 +1,6 @@
 ﻿using _21an;
 using Spectre.Console;
 using static _21an.Cards;
-using Terminal.Gui;
 
 public class Program
 {
@@ -21,25 +20,6 @@ public class Program
             }
         }
     }
-    private static object CheckForWinnerOrGivePCCard(int computerScore, int newPCCardValue, ref Card newPCCard)
-    {
-        if (computerScore > 21)
-        {
-            AnsiConsole.MarkupLine($"Du vann! Grattis. Datorn fick [chartreuse3_1]{computerScore}[/], vilket är mer än [chartreuse3_1]21[/].");
-            ReturnToMenu();
-        }
-
-        else if (computerScore == 21)
-        {
-            AnsiConsole.MarkupLine($"Datorn plockade upp kortet [chartreuse3_1]{newPCCardValue}[/]. Datorn har nu [chartreuse3_1]21[/] poäng, och vann därför.");
-            ReturnToMenu();
-        }
-        computerScore += newPCCardValue;
-        AnsiConsole.MarkupLine($"Datorn plockade upp kortet [chartreuse3_1]{newPCCard}[/]. Datorn har nu [chartreuse3_1]{computerScore}[/] poäng.");
-        return computerScore;
-
-    }
-
     static void DrawCardsAndAsk(int userFirstValue, int userSecondValue, int computerFirstValue, int computerSecondValue, int userScore, int computerScore)
     {
         if (userFirstValue != userSecondValue)
@@ -55,11 +35,38 @@ public class Program
         AnsiConsole.MarkupLine($"Vill du ta ett till kort? [mediumspringgreen](ja/nej)[/]");
     }
 
-    public static bool Play21()
+    public static void AskForCard(int userScore, int computerScore)
     {
-        Console.Clear();
-        Deck deck = new Deck();
+        if (userScore < 21)
+        {
+            AnsiConsole.MarkupLine($"Datorn har fortfarande [chartreuse3_1]{computerScore}[/] poäng.");
+            AnsiConsole.MarkupLine("Vill du ta ett till kort? [mediumspringgreen](ja/nej)[/]");
+        }
+    }
+    public static bool UserScoreAbove21(int userScore, int computerScore)
+    {
+        if (userScore > 21)
+        {
+            AnsiConsole.MarkupLine($"Otur! Du fick för mycket poäng. Datorn har vunnit med [chartreuse3_1]{computerScore}[/] jämfört mot dina [chartreuse3_1]{userScore}[/].");
+            ReturnToMenu();
+            return false;
+        }
+        else return true;
+    }
 
+    public static bool UserScoreIs21(int userScore)
+    {
+        if (userScore == 21)
+        {
+            AnsiConsole.MarkupLine("Grattis. Du har vunnit spelet då du fick [chartreuse3_1]21[/] poäng.");
+            ReturnToMenu();
+            return true;
+        }
+        else return false;
+    }
+
+    public static void DeclareCards(ref Deck deck)
+    {
         var userFirstCard = deck.Draw();
         var userSecondCard = deck.Draw();
         var computerFirstCard = deck.Draw();
@@ -73,7 +80,20 @@ public class Program
         int userScore = userFirstValue + userSecondValue;
         int computerScore = computerFirstValue + computerSecondValue;
 
-        DrawCardsAndAsk(userFirstValue, userSecondValue, computerFirstValue, computerSecondValue, userScore, computerScore);
+        var user = new { Card = userFirstCard, SecondCard = userSecondCard, Value = userFirstValue, SecondValue = userSecondValue, Score = userScore };
+        var computer = new { Card = computerFirstCard, SecondCard = computerSecondCard, Value = computerFirstValue, SecondValue = computerSecondValue, Score = computerScore };
+
+        object[] objects { user, computer };
+    }
+
+    public static bool Play21()
+    {
+        Console.Clear();
+        Deck deck = new Deck();
+
+        DeclareCards(ref deck);
+
+        DrawCardsAndAsk(userSecondValue, computerFirstValue, computerSecondValue, userScore, computerScore);
         
         while (UserInputIsYes())
         {
@@ -85,27 +105,20 @@ public class Program
                 userScore += newUserCardValue;
 
                 AnsiConsole.MarkupLine($"Du fick kortet [chartreuse3_1]{newUserCard}[/]. Du har nu [chartreuse3_1]{userScore}[/] poäng.");
-                if (userScore < 21)
+                
+                AskForCard(userScore, computerScore);
+                
+                if (!UserScoreAbove21(userScore, computerScore))
                 {
-                    AnsiConsole.MarkupLine($"Datorn har fortfarande [chartreuse3_1]{computerScore}[/] poäng.");
-                    AnsiConsole.MarkupLine("Vill du ta ett till kort? [mediumspringgreen](ja/nej)[/]");
-                }
-
-                else if (userScore > 21)
-                {
-                    AnsiConsole.MarkupLine($"Otur! Du fick för mycket poäng. Datorn har vunnit med [chartreuse3_1]{computerScore}[/] jämfört mot dina [chartreuse3_1]{userScore}[/].");
-                    ReturnToMenu();
                     return false;
                 }
-                else if (userScore == 21)
+
+                else if (UserScoreIs21(userScore))
                 {
-                    AnsiConsole.MarkupLine("Grattis. Du har vunnit spelet då du fick [chartreuse3_1]21[/] poäng.");
-                    ReturnToMenu();
                     return true;
                 }
             }
         }
-
 
         while (computerScore < 21 && computerScore < userScore)
         {
@@ -168,7 +181,7 @@ public class Program
     {
         while (true)
         {
-            string? userName;
+            string? userName = String.Empty;
             Console.Clear();
             Console.WriteLine("");
             Console.Write("Ange ditt namn: ");
@@ -246,7 +259,8 @@ public class Program
                 ReturnToMenu();
                 break;
             case "6":
-                return;
+                Environment.Exit(0);
+                break;
         }
     }
 
