@@ -38,6 +38,8 @@ public class Program
         return scores;
     }
 
+
+
     public static void AskForCard(int userScore, int computerScore)
     {
         if (userScore < 21)
@@ -55,6 +57,31 @@ public class Program
             return false;
         }
         else return true;
+    }
+
+    public static bool GiveNewCard(ref Deck deck, ref Program user, ref Program computer)
+    {
+        var newUserCard = deck.Draw();
+        Console.Clear();
+        if (user.Score < 21)
+        {
+            int newUserCardValue = (int)newUserCard.Value;
+            user.Score += newUserCardValue;
+            AnsiConsole.MarkupLine($"Du fick kortet [chartreuse3_1]{newUserCard}[/]. Du har nu [chartreuse3_1]{user.Score}[/] poäng.");
+
+            AskForCard(user.Score, computer.Score);
+
+            if (!UserScoreAbove21(user.Score, computer.Score))
+            {
+                return false;
+            }
+
+            else if (UserScoreIs21(user.Score))
+            {
+                return true;
+            }
+        }
+        
     }
 
     public static bool UserScoreIs21(int userScore)
@@ -105,26 +132,7 @@ public class Program
 
         while (UserInputIsYes())
         {
-            Console.Clear();
-            if (user.Score < 21)
-            {
-                var newUserCard = deck.Draw();
-                int newUserCardValue = (int)newUserCard.Value;
-                user.Score += newUserCardValue;
-                AnsiConsole.MarkupLine($"Du fick kortet [chartreuse3_1]{newUserCard}[/]. Du har nu [chartreuse3_1]{user.Score}[/] poäng.");
-                
-                AskForCard(user.Score, computer.Score);
-                
-                if (!UserScoreAbove21(user.Score, computer.Score))
-                {
-                    return false;
-                }
-
-                else if (UserScoreIs21(user.Score))
-                {
-                    return true;
-                }
-            }
+            GiveNewCard(ref deck, ref user, ref computer);
         }
 
         while (computer.Score < 21 && computer.Score < user.Score)
@@ -178,7 +186,6 @@ public class Program
             ReturnToMenu();
             return false;
         }
-
         else
         {
             return false;
