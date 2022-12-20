@@ -68,20 +68,9 @@ public class Program
             int newUserCardValue = (int)newUserCard.Value;
             user.Score += newUserCardValue;
             AnsiConsole.MarkupLine($"Du fick kortet [chartreuse3_1]{newUserCard}[/]. Du har nu [chartreuse3_1]{user.Score}[/] poäng.");
-
-            AskForCard(user.Score, computer.Score);
-
-            if (!UserScoreAbove21(user.Score, computer.Score))
-            {
-                return false;
-            }
-
-            else if (UserScoreIs21(user.Score))
-            {
-                return true;
-            }
+            return true;
         }
-        
+        else return false;
     }
 
     public static bool UserScoreIs21(int userScore)
@@ -132,7 +121,11 @@ public class Program
 
         while (UserInputIsYes())
         {
-            GiveNewCard(ref deck, ref user, ref computer);
+            if (!GiveNewCard(ref deck, ref user, ref computer))
+            {
+                return true;
+            }
+            AskForCard(user.Score, computer.Score);
         }
 
         while (computer.Score < 21 && computer.Score < user.Score)
