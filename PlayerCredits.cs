@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Spectre.Console;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -33,7 +34,7 @@ namespace _21an
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine($"Hur mycket vill du betta? Du har {userMoney} credits.");
+                AnsiConsole.MarkupLine($"Hur mycket vill du betta? Du har [cadetblue]{userMoney}[/] credits.");
 
                 int userBet;
                 while (!int.TryParse(Console.ReadLine(), out userBet))
