@@ -125,19 +125,26 @@ public class Program
                 {
                     AskForCard(user.Card, user.Score, computer.Score);
                 }
-                else if (!CheckForWin(user.Score))
+                else if ((bool)!CheckForWin(user.Score, ref user))
                 {
                     userLost(user.Score);
+                    ReturnToMenu();
                     return false;
                 }
-                else if (CheckForWin(user.Score))
+                else if ((bool)CheckForWin(user.Score, ref user))
                 {
                     userWon();
                     return true;
                 }
+                else if (CheckForWin(user.Score, ref user) == null)
+                {
+
+                }
             }
             else if (!GiveNewCard(ref deck, ref user, ref computer))
             {
+                Console.WriteLine($"Du fick kortet {user.Card}. Du har nu {user.Score} poäng");
+                userLost(user.Score);
                 return false;
             }
         }
@@ -160,7 +167,6 @@ public class Program
             {
                 AnsiConsole.MarkupLine($"Datorn plockade upp kortet [chartreuse4]{newPCCard}[/]. Datorn har nu [cadetblue]21[/] poäng, och vann därför.");
                 ReturnToMenu();
-                Thread.Sleep(3000);
                 return false;
             }
             else
@@ -203,30 +209,30 @@ public class Program
     private static bool userLost(int score)
     {
         AnsiConsole.MarkupLine($"Du har förlorat då du fick [cadetblue]{score}[/] poäng, som är mer än [cadetblue]21[/].");
-        Thread.Sleep(3000);
-        ReturnToMenu();
+        ReturnToMenu(); 
         return false;
     }
 
     private static bool userWon()
     {
         AnsiConsole.MarkupLine($"Du har vunnit med [cadetblue]21[/] poäng. Grattis!");
-        Thread.Sleep(3000);
         ReturnToMenu();
         return true;
     }
 
-    private static bool CheckForWin(int score)
+    private static bool? CheckForWin(int score, ref Program user)
     {
         if (score > 21)
         {
+            Console.WriteLine($"Du fick kortet {user.Card} som är mer än 21. Du har därför förlorat.");
             return false;
         }
         else if (score == 21)
         {
+            Console.WriteLine($"Du fick kortet {user.Card}. Du har nu {score} poäng.");
             return true;
         }
-        else return true;
+        else return null;
     }
 
     private static string InputName()
@@ -377,9 +383,9 @@ public class Program
             AnsiConsole.MarkupLine("[darkgoldenrod]  4.[/] Sök Statistiken");
             AnsiConsole.MarkupLine("[darkgoldenrod]  5.[/] Visa All Statistik");
             AnsiConsole.MarkupLine("[darkgoldenrod]  6.[/] Avsluta Spelet");
-             string? userInput = Console.ReadLine();
+            string? userInput = Console.ReadLine();
 
-            menuResult = Menu(userInput, nameOfUser, lastWinner, ref playerStats);
+                menuResult = Menu(userInput, nameOfUser, lastWinner, ref playerStats);
             if (menuResult == "Datorn") lastWinner = "Datorn";
             else lastWinner = menuResult;
         }
