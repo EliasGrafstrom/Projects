@@ -1,6 +1,5 @@
 ﻿using _21an;
 using Spectre.Console;
-using static _21an.Cards;
 
 public class Program
 {
@@ -125,20 +124,16 @@ public class Program
                 {
                     AskForCard(user.Card, user.Score, computer.Score);
                 }
-                else if ((bool)!CheckForWin(user.Score, ref user))
+                else if (!CheckForWin(user.Score, ref user))
                 {
                     userLost(user.Score);
                     ReturnToMenu();
                     return false;
                 }
-                else if ((bool)CheckForWin(user.Score, ref user))
+                else if (CheckForWin(user.Score, ref user))
                 {
                     userWon();
                     return true;
-                }
-                else if (CheckForWin(user.Score, ref user) == null)
-                {
-
                 }
             }
             else if (!GiveNewCard(ref deck, ref user, ref computer))
@@ -220,19 +215,18 @@ public class Program
         return true;
     }
 
-    private static bool? CheckForWin(int score, ref Program user)
+    private static bool CheckForWin(int score, ref Program user)
     {
         if (score > 21)
         {
-            Console.WriteLine($"Du fick kortet {user.Card} som är mer än 21. Du har därför förlorat.");
+            AnsiConsole.MarkupLine($"Du fick kortet [cadetblue]{user.Card}[/]. Du har nu [cadetblue]{user.Score}[/] poäng.");
             return false;
         }
-        else if (score == 21)
+        else
         {
             Console.WriteLine($"Du fick kortet {user.Card}. Du har nu {score} poäng.");
             return true;
         }
-        else return null;
     }
 
     private static string InputName()

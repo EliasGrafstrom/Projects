@@ -54,7 +54,7 @@ namespace _21an
 
     public enum CardValue
     {
-        ess = 1,
+        ess = 1,    
         två = 2,
         tre = 3,
         fyra = 4,
@@ -64,9 +64,9 @@ namespace _21an
         åtta = 8,
         nio = 9,
         tio = 10,
-        knekt = 10,
-        dam = 10,
-        kung = 10
+        knekt = 11,
+        dam = 12,
+        kung = 13
     }
 
     public enum CardSuite
@@ -75,30 +75,5 @@ namespace _21an
         Spader,
         Ruter,
         Hjärter
-    }
-
-    internal class Cards
-    {
-        string? Name { get; set; }
-        int? Points { get; set; }
-
-        private int RandomCardColor()
-        {
-            Random random = new Random();
-            int randomCard = random.Next(0, 3);
-            return randomCard;
-        }
-
-        private string GetCardColor()
-        {
-            string[] CardColor =
-            {
-                "Klöver",
-                "Spader",
-                "Ruter",
-                "Hjärter"
-            };
-            return CardColor[RandomCardColor()];
-        }
     }
 }
