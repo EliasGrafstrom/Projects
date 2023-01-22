@@ -37,14 +37,16 @@ public class Program
         return scores;
     }
 
-
-
     public static void AskForCard(Card userCard, int userScore, int computerScore)
     {
             AnsiConsole.MarkupLine($"Du fick kortet [chartreuse4]{userCard}[/]. Du har nu [cadetblue]{userScore}[/] poäng.");
             AnsiConsole.MarkupLine($"Datorn har fortfarande [cadetblue]{computerScore}[/] poäng.");
             AnsiConsole.MarkupLine("Vill du ta ett till kort? [royalblue1](ja/nej)[/]");
     }
+
+    public static int CardValue(int cardValue) => cardValue > 10 ? 10 : cardValue;
+    //returns 10 if the card is above 10, if it's under 10 it returns the original value
+
     public static bool UserScoreAbove21(int userScore, int computerScore)
     {
         if (userScore > 21)
@@ -90,10 +92,10 @@ public class Program
         computer.Card = deck.Draw();
         computer.SecondCard = deck.Draw();
 
-        user.Value = (int)user.Card.Value;
-        user.SecondValue = (int)user.SecondCard.Value;
-        computer.Value = (int)computer.Card.Value;
-        computer.SecondValue = (int)computer.SecondCard.Value;
+        user.Value = CardValue((int)user.Card.Value);
+        user.SecondValue = CardValue((int)user.SecondCard.Value);
+        computer.Value = CardValue((int)computer.Card.Value);
+        computer.SecondValue = CardValue((int)computer.SecondCard.Value);
 
         int userScore = user.Value + user.SecondValue;
         int computerScore = computer.Value + computer.SecondValue;
