@@ -66,6 +66,7 @@ public class Program
         {
             int newUserCardValue = CardValue((int)newUserCard.Value);
             user.Score += newUserCardValue;
+            user.Card = newUserCard;
             return true;
         }
         else return false;
@@ -117,7 +118,7 @@ public class Program
         user.Score = scores[0];
         computer.Score = scores[1];
 
-        while (UserInputIsYes())
+            while (UserInputIsYes())
         {
             Console.Clear();
             if (GiveNewCard(ref deck, ref user, ref computer))
@@ -129,7 +130,6 @@ public class Program
                 else if (!CheckForWin(user.Score, ref user))
                 {
                     userLost(user.Score);
-                    ReturnToMenu();
                     return false;
                 }
                 else if (CheckForWin(user.Score, ref user))
