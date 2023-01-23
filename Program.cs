@@ -64,7 +64,7 @@ public class Program
         Console.Clear();
         if (user.Score < 21)
         {
-            int newUserCardValue = (int)newUserCard.Value;
+            int newUserCardValue = CardValue((int)newUserCard.Value);
             user.Score += newUserCardValue;
             return true;
         }
