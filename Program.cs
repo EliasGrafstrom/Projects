@@ -131,16 +131,18 @@ public class Program
                 {
                     userLost(user.Score);
                     return false;
+                    //user lost
                 }
-                else if (CheckForWin(user.Score, ref user))
+                else
                 {
                     userWon();
                     return true;
+                    //user win
                 }
             }
             else if (!GiveNewCard(ref deck, ref user, ref computer))
             {
-                Console.WriteLine($"Du fick kortet {user.Card}. Du har nu {user.Score} poäng");
+                AnsiConsole.MarkupLine($"Du fick kortet [chartreuse4]{user.Card}[/]. Du har nu [cadetblue]{user.Score}[/] poäng");
                 userLost(user.Score);
                 return false;
             }
@@ -219,6 +221,7 @@ public class Program
 
     private static bool CheckForWin(int score, ref Program user)
     {
+        //score is always 21 or over here
         if (score > 21)
         {
             AnsiConsole.MarkupLine($"Du fick kortet [cadetblue]{user.Card}[/]. Du har nu [cadetblue]{user.Score}[/] poäng.");
@@ -226,8 +229,9 @@ public class Program
         }
         else
         {
-            Console.WriteLine($"Du fick kortet {user.Card}. Du har nu {score} poäng.");
+            Console.WriteLine($"Du fick kortet [cadetblue]{user.Card}[/]. Du har nu [cadetblue]{user.Score}[/] poäng.");
             return true;
+            //score is 21
         }
     }
 
@@ -305,6 +309,13 @@ public class Program
             case "4":
                 string userName = SearchStatistics().FirstCharToUpper();
                 var statisticsResult = playerStats.GetPlayerStats(userName);
+                if (statisticsResult.Matches == 0)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Personen finns inte.");
+                    ReturnToMenu();
+                    break;
+                }
                 Console.WriteLine($"Spelare: {userName} {statisticsResult}");
                 ReturnToMenu();
                 break;
