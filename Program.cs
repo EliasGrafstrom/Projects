@@ -229,7 +229,7 @@ public class Program
         }
         else
         {
-            Console.WriteLine($"Du fick kortet [cadetblue]{user.Card}[/]. Du har nu [cadetblue]{user.Score}[/] poäng.");
+            AnsiConsole.MarkupLine($"Du fick kortet [cadetblue]{user.Card}[/]. Du har nu [cadetblue]{user.Score}[/] poäng.");
             return true;
             //score is 21
         }
