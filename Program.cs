@@ -270,8 +270,8 @@ public class Program
         }
     }
 
-    private static string Menu(string userInput, string nameOfUser, string lastWinner, ref PlayerStatsDatabase playerStats)
-    {
+    private static string Menu(string userInput, string nameOfUser, ref PlayerStatsDatabase playerStats)
+    { 
         switch (userInput)
         {
             case "1":
@@ -300,7 +300,8 @@ public class Program
             case "2":
                 Console.Clear();
                 Console.WriteLine("");
-                AnsiConsole.MarkupLine($"Senaste vinnaren var [darkgoldenrod]{lastWinner}[/].");
+                StreamReader file = new StreamReader("lastWinner.txt");
+                AnsiConsole.MarkupLine($"Senaste vinnaren var []{file.Read();}.");
                 ReturnToMenu();
                 break;
             case "3":
@@ -392,7 +393,7 @@ public class Program
             AnsiConsole.MarkupLine("[darkgoldenrod]  6.[/] Avsluta Spelet");
             string? userInput = Console.ReadLine();
 
-                menuResult = Menu(userInput, nameOfUser, lastWinner, ref playerStats);
+                menuResult = Menu(userInput, nameOfUser, ref playerStats);
             if (menuResult == "Datorn") lastWinner = "Datorn";
             else lastWinner = menuResult;
         }

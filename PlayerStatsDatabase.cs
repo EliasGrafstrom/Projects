@@ -13,18 +13,24 @@ internal class PlayerStatsDatabase
     }
     internal void RecordPlayerLoss(string nameOfUser, int userMoney, int userBet)
     {
+        StreamWriter sw = new StreamWriter("lastWinner.txt");
         var playerStats = GetPlayerStats(nameOfUser);
         playerStats.Matches++;
         playerStats.Credits = userMoney -= userBet - 10;
+        sw.WriteLine("Datorn");
+        sw.Close();
         SaveChanges();
     } //records player loss
 
     internal void RecordPlayerWin(string nameOfUser, int userMoney, int userBet)
     {
+        StreamWriter sw = new StreamWriter("lastWinner.txt");
         var playerStats = GetPlayerStats(nameOfUser);
         playerStats.Matches++;
         playerStats.Wins++;
         playerStats.Credits = userMoney + userBet;
+        sw.WriteLine(nameOfUser);
+        sw.Close();
         SaveChanges();
     } //records player win
     public PlayerStats GetPlayerStats(string nameOfUser)
