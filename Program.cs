@@ -270,7 +270,7 @@ public class Program
         }
     }
 
-    private static string Menu(string userInput, string nameOfUser, ref PlayerStatsDatabase playerStats)
+    private static void Menu(string userInput, string nameOfUser, ref PlayerStatsDatabase playerStats)
     { 
         switch (userInput)
         {
@@ -286,13 +286,13 @@ public class Program
                     {
                         playerStats.RecordPlayerWin(nameOfUser, userMoney, userBet);
                         Console.Clear();
-                        return nameOfUser;
+                        return;
                     }
                     else
                     {
                         playerStats.RecordPlayerLoss(nameOfUser, userMoney, userBet);
                         Console.Clear();
-                        return "Datorn";
+                        return;
                     }
                 }
                 while (AskForRematch());
@@ -301,7 +301,7 @@ public class Program
                 Console.Clear();
                 Console.WriteLine("");
                 StreamReader file = new StreamReader("lastWinner.txt");
-                AnsiConsole.MarkupLine($"Senaste vinnaren var []{file.Read();}.");
+                Console.WriteLine($"Senaste vinnaren var {file.ReadLine()}.");
                 ReturnToMenu();
                 break;
             case "3":
@@ -332,7 +332,6 @@ public class Program
                 Environment.Exit(0);
                 break;
         }
-        return String.Empty;
     }
 
     private static bool AskForRematch()
@@ -393,9 +392,7 @@ public class Program
             AnsiConsole.MarkupLine("[darkgoldenrod]  6.[/] Avsluta Spelet");
             string? userInput = Console.ReadLine();
 
-                menuResult = Menu(userInput, nameOfUser, ref playerStats);
-            if (menuResult == "Datorn") lastWinner = "Datorn";
-            else lastWinner = menuResult;
+            Menu(userInput, nameOfUser, ref playerStats);
         }
     }
 }

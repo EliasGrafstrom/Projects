@@ -8,11 +8,11 @@
     <Nullable>enable</Nullable>
     <PackageIcon>21logo.png</PackageIcon>
     <Title>21an</Title>
-    <ApplicationIcon>21logooo.ico</ApplicationIcon>
+    <ApplicationIcon>21logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="21logooo.ico">
+    <Content Include="21logo.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
