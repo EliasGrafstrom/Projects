@@ -358,6 +358,7 @@ public class Program
         Console.WriteLine("");
         AnsiConsole.MarkupLine("[darkgoldenrod]   Tryck på vilken tangent som helst för att gå tillbaka.[/]");
         var input = Console.ReadKey();
+        Console.Write(input);
         if (input.Equals(9))
         {
             File.WriteAllText("playerStats.json", "{}");
