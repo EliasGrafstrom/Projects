@@ -1,6 +1,7 @@
 ﻿using _21an;
 using Spectre.Console;
-
+using System;
+using System.IO;
 public class Program
 {
     public Card? Card { get; set; }
@@ -118,8 +119,8 @@ public class Program
         user.Score = scores[0];
         computer.Score = scores[1];
 
-            while (UserInputIsYes())
-        {
+          while (UserInputIsYes())
+          {
             Console.Clear();
             if (GiveNewCard(ref deck, ref user, ref computer))
             {
@@ -146,7 +147,7 @@ public class Program
                 userLost(user.Score);
                 return false;
             }
-        }
+         }
 
         while (computer.Score < 21 && computer.Score < user.Score)
         {
@@ -259,6 +260,18 @@ public class Program
                 continue;
             }
 
+            if (string.IsNullOrEmpty(userName))
+            {
+                Console.Clear();
+                Console.WriteLine("");
+                Console.WriteLine("Du kan inte ha ett tomt namn.");
+                Console.WriteLine("");
+                Console.WriteLine("Tryck vilken tangent som helst för att bekräfta.");
+                Console.ReadKey();
+                Console.Clear();
+                continue;
+            }
+
             if (isAlpha)
             {
                 AnsiConsole.MarkupLine("Är du säker? [royalblue1](ja/nej)[/]");
@@ -277,32 +290,32 @@ public class Program
             case "1":
                 nameOfUser = InputName();
                 playerCurrency currency = new playerCurrency();
-                int userMoney = currency.GetUserMoney(nameOfUser);
-                int userBet = currency.MakeBet(userMoney);
-
+                int userMoney;
                 do
                 {
+                    userMoney = currency.GetUserMoney(nameOfUser);
+                    int userBet = currency.MakeBet(userMoney);
+                    
                     if (Play21())
                     {
                         playerStats.RecordPlayerWin(nameOfUser, userMoney, userBet);
-                        Console.Clear();
-                        return;
                     }
                     else
                     {
                         playerStats.RecordPlayerLoss(nameOfUser, userMoney, userBet);
-                        Console.Clear();
-                        return;
                     }
                 }
                 while (AskForRematch());
+                return;
 
             case "2":
                 Console.Clear();
                 Console.WriteLine("");
                 StreamReader file = new StreamReader("lastWinner.txt");
-                Console.WriteLine($"Senaste vinnaren var {file.ReadLine()}.");
-                ReturnToMenu();
+                string textLine = file.ReadLine();
+                Console.WriteLine(textLine != "Ingen har spelat än" ? $"Senaste vinnaren var {textLine}." : textLine);
+                file.Close();
+                ReturnToMenu(); 
                 break;
             case "3":
                 Play21Rules();
@@ -326,38 +339,57 @@ public class Program
                 {
                     Console.WriteLine($"{user.Name.FirstCharToUpper()} {user.Stats}\n");
                 }
+                var json = File.ReadAllText("playerStats.json");
+                if (json != "{}" || !string.IsNullOrEmpty(json))
+                {
+                    ResetStats();
+                }
                 ReturnToMenu();
                 break;
             case "6":
+                StreamWriter sw = new StreamWriter("lastWinner.txt");
+                sw.WriteLine("Ingen har spelat än");
+                sw.Close();
                 Environment.Exit(0);
                 break;
         }
+    }
+
+    private static void ResetStats()
+    {
+        AnsiConsole.MarkupLine("[red1]Skriv 9 om du vill återställa statistiken. (Återställs efter omstart av programmet)[/]");
+
+        if (Console.ReadLine() == "9")
+        {
+            File.WriteAllText("playerStats.json", "{}");
+            ReturnToMenu();
+        }   //resets stats and ask to return to menu
     }
 
     private static bool AskForRematch()
     {
         Console.Clear();
         Console.WriteLine("");
-        Console.WriteLine("Vill du spela igen");
-        if (UserInputIsYes())
+        Console.WriteLine("");
+        while (true)
         {
-            return true;
+            AnsiConsole.MarkupLine("             [lightgoldenrod2_1]Vill du spela igen? [/][royalblue1](ja/nej)[/]");
+            return UserInputIsYes();
         }
-        else return false;
     }
 
     private static void Play21Rules()
     {
         Console.Clear();
         Console.WriteLine("");
-        Console.WriteLine("Spelet går ut på att man tar kort tills du har 21, eller så nära som möjligt, men inte mer.");
-        Console.WriteLine("Ess är värt 1 poäng, knekt 11, dam 12 och kung 13.");
-        Console.WriteLine("Det du bettar dubblas om du vinner, om du förlorar så förlorar du det som du bettat.");
-        Console.WriteLine("Du får 10 poäng för varje match du förlorar, så du inte fastnar på 0 poäng.");
+        AnsiConsole.MarkupLine("~     Spelet går ut på att man tar kort tills du har [orange1]21[/], eller så nära som möjligt, men inte mer.");
+        AnsiConsole.MarkupLine("~     [orange1]Ess[/] är värt [orange1]1[/] poäng, [orange1]knekt 11[/], [orange1]dam 12[/] och [orange1]kung 13[/].");
+        AnsiConsole.MarkupLine("~     Det du bettar [skyblue2]dubblas om du vinner[/], om du förlorar så [skyblue2]förlorar du det som du bettat[/].");
+        AnsiConsole.MarkupLine("~     Du får [skyblue2]10 poäng[/] för varje match du förlorar, så du inte fastnar på 0 poäng.");
         ReturnToMenu();
     }
 
-    internal static void ReturnToMenu()
+    public static void ReturnToMenu()
     {
         Console.WriteLine("");
         AnsiConsole.MarkupLine("[darkgoldenrod]   Tryck på vilken tangent som helst för att gå tillbaka.[/]");
@@ -376,7 +408,6 @@ public class Program
     {
         PlayerStatsDatabase playerStats = new PlayerStatsDatabase();
         string lastWinner = string.Empty;
-        string menuResult;
         string nameOfUser = String.Empty;
         while (true)
         {   
