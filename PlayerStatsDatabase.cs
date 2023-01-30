@@ -1,7 +1,5 @@
 ﻿using _21an;
 using System.IO;
-using System.Reflection.Metadata;
-using System.Reflection.Metadata.Ecma335;
 using System.Text.Json;
 
 internal class PlayerStatsDatabase

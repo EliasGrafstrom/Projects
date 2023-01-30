@@ -1,7 +1,5 @@
 ﻿using _21an;
 using Spectre.Console;
-using System;
-using System.IO;
 public class Program
 {
     public Card? Card { get; set; }
@@ -344,7 +342,6 @@ public class Program
                 {
                     ResetStats();
                 }
-                ReturnToMenu();
                 break;
             case "6":
                 StreamWriter sw = new StreamWriter("lastWinner.txt");
@@ -358,12 +355,17 @@ public class Program
     private static void ResetStats()
     {
         AnsiConsole.MarkupLine("[red1]Skriv 9 om du vill återställa statistiken. (Återställs efter omstart av programmet)[/]");
-
-        if (Console.ReadLine() == "9")
+        Console.WriteLine("");
+        AnsiConsole.MarkupLine("[darkgoldenrod]   Tryck på vilken tangent som helst för att gå tillbaka.[/]");
+        var input = Console.ReadKey();
+        if (input.Equals(9))
         {
             File.WriteAllText("playerStats.json", "{}");
-            ReturnToMenu();
         }   //resets stats and ask to return to menu
+        else
+        {
+            return;
+        }
     }
 
     private static bool AskForRematch()
@@ -407,7 +409,6 @@ public class Program
     public static void Main()
     {
         PlayerStatsDatabase playerStats = new PlayerStatsDatabase();
-        string lastWinner = string.Empty;
         string nameOfUser = String.Empty;
         while (true)
         {   

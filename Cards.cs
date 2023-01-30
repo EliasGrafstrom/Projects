@@ -1,5 +1,4 @@
 ﻿using System;
-using static Terminal.Gui.Graphs.BarSeries;
 
 namespace _21an
 {
