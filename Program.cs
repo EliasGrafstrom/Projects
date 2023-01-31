@@ -7,7 +7,6 @@ public class Program
     public int Value { get; set; }
     public int SecondValue { get; set; }
     public int Score { get; set; }
-    public ConsoleKey Key { get; }
 
     static bool UserInputIsYes()
     {
@@ -348,6 +347,7 @@ public class Program
                 else
                 {
                     Console.WriteLine("Det finns inget att visa här.");
+                    ReturnToMenu();
                 }
                 break;
             case "6":
@@ -372,6 +372,7 @@ public class Program
             while (UserInputIsYes())
             {
                 File.WriteAllText("playerStats.json", "{}");
+                break;
             }
         }   //resets stats and ask to return to menu
         else
