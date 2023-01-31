@@ -7,7 +7,7 @@ namespace _21an
         internal int ReturnUserCredits(string nameOfUser)
         {
             PlayerStatsDatabase playerstatsDataBase = new PlayerStatsDatabase();
-            var playerStats = playerstatsDataBase.GetPlayerStats(nameOfUser);
+            var playerStats = playerstatsDataBase.GetOrCreateStats(nameOfUser);
             return playerStats.Credits;
         }
     }

@@ -7,6 +7,7 @@ public class Program
     public int Value { get; set; }
     public int SecondValue { get; set; }
     public int Score { get; set; }
+    public ConsoleKey Key { get; }
 
     static bool UserInputIsYes()
     {
@@ -296,10 +297,12 @@ public class Program
                     
                     if (Play21())
                     {
+                        playerStats.SaveChanges();
                         playerStats.RecordPlayerWin(nameOfUser, userMoney, userBet);
                     }
                     else
                     {
+                        playerStats.SaveChanges();
                         playerStats.RecordPlayerLoss(nameOfUser, userMoney, userBet);
                     }
                 }
@@ -320,7 +323,7 @@ public class Program
                 break;
             case "4":
                 string userName = SearchStatistics().FirstCharToUpper();
-                var statisticsResult = playerStats.GetPlayerStats(userName);
+                var statisticsResult = playerStats.GetOrCreateStats(userName);
                 if (statisticsResult.Matches == 0)
                 {
                     Console.Clear();
@@ -338,9 +341,13 @@ public class Program
                     Console.WriteLine($"{user.Name.FirstCharToUpper()} {user.Stats}\n");
                 }
                 var json = File.ReadAllText("playerStats.json");
-                if (json != "{}" || !string.IsNullOrEmpty(json))
+                if (json != "{}")
                 {
                     ResetStats();
+                }
+                else
+                {
+                    Console.WriteLine("Det finns inget att visa här.");
                 }
                 break;
             case "6":
@@ -354,14 +361,18 @@ public class Program
 
     private static void ResetStats()
     {
-        AnsiConsole.MarkupLine("[red1]Skriv 9 om du vill återställa statistiken. (Återställs efter omstart av programmet)[/]");
+        AnsiConsole.MarkupLine("[red1]Tryck Delete om du vill återställa statistiken. (Återställs efter omstart av programmet)[/]");
         Console.WriteLine("");
         AnsiConsole.MarkupLine("[darkgoldenrod]   Tryck på vilken tangent som helst för att gå tillbaka.[/]");
         var input = Console.ReadKey();
-        Console.Write(input);
-        if (input.Equals(9))
+
+        if (input.Key == ConsoleKey.Delete)
         {
-            File.WriteAllText("playerStats.json", "{}");
+            AnsiConsole.MarkupLine("[darkgoldenrod]Är du säker?[/]");
+            while (UserInputIsYes())
+            {
+                File.WriteAllText("playerStats.json", "{}");
+            }
         }   //resets stats and ask to return to menu
         else
         {

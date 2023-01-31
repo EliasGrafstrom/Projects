@@ -9,11 +9,11 @@ namespace _21an
         PlayerStatsDatabase playerStatsDataBase = new PlayerStatsDatabase();
         public int GetUserMoney(string userName)
         {
-            var r = playerStatsDataBase.GetPlayerStats(userName);
+            var r = playerStatsDataBase.GetOrCreateStats(userName);
 
             if (r.Matches == 0)
             {
-                var newPerson = playerStatsDataBase.GetPlayerStats(userName);
+                var newPerson = playerStatsDataBase.GetOrCreateStats(userName);
                 int result =  newPerson.Credits = 500;
                 return result;
             }

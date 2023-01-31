@@ -12,7 +12,7 @@ internal class PlayerStatsDatabase
     internal void RecordPlayerLoss(string nameOfUser, int userMoney, int userBet)
     {
         StreamWriter sw = new StreamWriter("lastWinner.txt");
-        var playerStats = GetPlayerStats(nameOfUser);
+        var playerStats = GetOrCreateStats(nameOfUser);
         playerStats.Matches++;
         playerStats.Credits = userMoney -= userBet - 10;
         sw.WriteLine("Datorn");
@@ -23,7 +23,7 @@ internal class PlayerStatsDatabase
     internal void RecordPlayerWin(string nameOfUser, int userMoney, int userBet)
     {
         StreamWriter sw = new StreamWriter("lastWinner.txt");
-        var playerStats = GetPlayerStats(nameOfUser);
+        var playerStats = GetOrCreateStats(nameOfUser);
         playerStats.Matches++;
         playerStats.Wins++;
         playerStats.Credits = userMoney + userBet;
@@ -31,22 +31,21 @@ internal class PlayerStatsDatabase
         sw.Close();
         SaveChanges();
     } //records player win
-    public PlayerStats GetPlayerStats(string nameOfUser)
+    public PlayerStats GetOrCreateStats(string nameOfUser)
     {
         if (_players.TryGetValue(nameOfUser.ToLower(), out PlayerStats? stats))
         {
             return stats;
         }
         PlayerStats newPerson = new PlayerStats();
-
+            
         _players.Add(nameOfUser.ToLower(), newPerson);
 
         return newPerson;
     } //returns the stats of a person, if the person doesn't exist, it creates a new person in the _players dictionary.
 
-
     const string path = "playerStats.json";
-    private void SaveChanges()
+    public void SaveChanges()
     {
         var jsonToWrite = JsonSerializer.Serialize(_players);
         File.WriteAllText(path, jsonToWrite);
