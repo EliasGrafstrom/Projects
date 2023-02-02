@@ -1,19 +1,24 @@
 ﻿using Spectre.Console;
-using System;
 
 namespace _21an
 {
     internal class playerCurrency
     {
+        public PlayerStatsDatabase playerStatsDatabase { get; set; }
+
+        public playerCurrency(ref PlayerStatsDatabase playerStatsDataBase)
+        {
+            playerStatsDatabase = playerStatsDataBase;
+        }
+
         CreditsProfiles creditsProfile = new CreditsProfiles();
-        PlayerStatsDatabase playerStatsDataBase = new PlayerStatsDatabase();
         public int GetUserMoney(string userName)
         {
-            var r = playerStatsDataBase.GetOrCreateStats(userName);
+            var r = playerStatsDatabase.GetOrCreateStats(userName);
 
             if (r.Matches == 0)
             {
-                var newPerson = playerStatsDataBase.GetOrCreateStats(userName);
+                var newPerson = playerStatsDatabase.GetOrCreateStats(userName);
                 int result =  newPerson.Credits = 500;
                 return result;
             }

@@ -286,8 +286,8 @@ public class Program
         switch (userInput)
         {
             case "1":
-                nameOfUser = InputName();
-                playerCurrency currency = new playerCurrency();
+                nameOfUser = InputName(); 
+                playerCurrency currency = new playerCurrency(ref playerStats);
                 int userMoney;
                 do
                 {
