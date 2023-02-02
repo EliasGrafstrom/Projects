@@ -4,14 +4,16 @@ namespace _21an
 {
     internal class playerCurrency
     {
+        private CreditsProfiles creditsProfile { get; set; }
+
         public PlayerStatsDatabase playerStatsDatabase { get; set; }
 
         public playerCurrency(ref PlayerStatsDatabase playerStatsDataBase)
         {
             playerStatsDatabase = playerStatsDataBase;
+            creditsProfile = new CreditsProfiles(ref playerStatsDataBase);
         }
 
-        CreditsProfiles creditsProfile = new CreditsProfiles();
         public int GetUserMoney(string userName)
         {
             var r = playerStatsDatabase.GetOrCreateStats(userName);
