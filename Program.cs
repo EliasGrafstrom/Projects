@@ -372,6 +372,7 @@ public class Program
             while (UserInputIsYes())
             {
                 File.WriteAllText("playerStats.json", "{}");
+                var json = File.ReadAllText("playerStats.json");
                 break;
             }
         }   //resets stats and ask to return to menu
