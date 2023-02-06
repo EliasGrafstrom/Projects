@@ -152,7 +152,7 @@ public class Program
             int noDelay = 1;
             Console.Clear();
             Card newPCCard = deck.Draw();
-            int newPCCardValue = (int)newPCCard.Value;
+            computer.Value = CardValue((int)newPCCard.Value);
 
             if (computer.Score > 21)
             {
@@ -169,7 +169,7 @@ public class Program
             }
             else
             {
-                computer.Score += newPCCardValue;
+                computer.Score += computer.Value;
                 AnsiConsole.MarkupLine($"Datorn plockade upp kortet [chartreuse4]{newPCCard}[/]. Datorn har nu [cadetblue]{computer.Score}[/] poäng.");
             }
             if (noDelay == 1)
@@ -305,7 +305,7 @@ public class Program
                         playerStats.RecordPlayerLoss(nameOfUser, userMoney, userBet);
                     }
                 }
-                while (AskForRematch());
+                    while (AskForRematch());
                 return;
 
             case "2":
@@ -333,7 +333,7 @@ public class Program
                 Console.WriteLine($"Spelare: {userName} {statisticsResult}");
                 ReturnToMenu();
                 break;
-            case "5":
+            case "5": 
                 Console.Clear();
                 foreach (var user in playerStats.GetAllStats())
                 {
