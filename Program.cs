@@ -8,6 +8,26 @@ public class Program
     public int SecondValue { get; set; }
     public int Score { get; set; }
 
+
+    private static bool CheckForWin(ref Program user, ref Program computer)
+    {
+        if (user.Score <= 21 && user.Score > computer.Score)
+        {
+            AnsiConsole.MarkupLine($"Du har vunnit med [cadetblue]{user.Score}[/] jämfört mot datorns [cadetblue]{computer.Score}[/]. Grattis!");
+            ReturnToMenu();
+            return true;
+        }
+        else if (computer.Score <= 21)
+        {
+            AnsiConsole.MarkupLine($"Datorn har vunnit med [cadetblue]{computer.Score}[/] jämfört mot dina [cadetblue]{user.Score}[/].");
+            ReturnToMenu();
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+    }
     static bool UserInputIsYes()
     {
         while (true)
@@ -46,17 +66,6 @@ public class Program
     public static int CardValue(int cardValue) => cardValue > 10 ? 10 : cardValue;
     //returns 10 if the card is above 10, if it's under 10 it returns the original value
 
-    public static bool UserScoreAbove21(int userScore, int computerScore)
-    {
-        if (userScore > 21)
-        {
-            AnsiConsole.MarkupLine($"Otur! Du fick för mycket poäng. Datorn har vunnit med [cadetblue]{computerScore}[/] jämfört mot dina [cadetblue]{userScore}[/].");
-            ReturnToMenu();
-            return false;
-        }
-        else return true;
-    }
-
     public static bool GiveNewCard(ref Deck deck, ref Program user, ref Program computer)
     {
         var newUserCard = deck.Draw();
@@ -71,15 +80,22 @@ public class Program
         else return false;
     }
 
-    public static bool UserScoreIs21(int userScore)
+    private static int CheckWinOrDraw(ref Program user, ref Program computer, ref Card newPCCard)
     {
-        if (userScore == 21)
+        if (computer.Score > 21)
         {
-            AnsiConsole.MarkupLine("Grattis. Du har vunnit spelet då du fick [cadetblue]21[/] poäng.");
+            AnsiConsole.MarkupLine($"Du vann! Grattis. Datorn fick [cadetblue]{computer.Value}[/], vilket är mer än [cadetblue]21[/].");
             ReturnToMenu();
-            return true;
+            return 1;
         }
-        else return false;
+
+        else if (computer.Score == 21)
+        {
+            AnsiConsole.MarkupLine($"Datorn plockade upp kortet [chartreuse4]{newPCCard}[/]. Datorn har nu [cadetblue]21[/] poäng, och vann därför.");
+            ReturnToMenu();
+            return 2;
+        }
+        else return 3;
     }
 
     public static object[] DeclareCards(ref Deck deck)
@@ -154,19 +170,9 @@ public class Program
             Card newPCCard = deck.Draw();
             computer.Value = CardValue((int)newPCCard.Value);
 
-            if (computer.Score > 21)
-            {
-                AnsiConsole.MarkupLine($"Du vann! Grattis. Datorn fick [cadetblue]{computer.Value}[/], vilket är mer än [cadetblue]21[/].");
-                ReturnToMenu();
-                return true;
-            }
+            int winResult = CheckWinOrDraw(ref user, ref computer, ref newPCCard);
 
-            else if (computer.Score == 21)
-            {
-                AnsiConsole.MarkupLine($"Datorn plockade upp kortet [chartreuse4]{newPCCard}[/]. Datorn har nu [cadetblue]21[/] poäng, och vann därför.");
-                ReturnToMenu();
-                return false;
-            }
+            if (winResult == 1) return true; else if (winResult == 2) return false;
             else
             {
                 computer.Score += computer.Value;
@@ -185,23 +191,8 @@ public class Program
             ReturnToMenu();
             return true;
         }
-
-        if (user.Score <= 21 && user.Score > computer.Score)
-        {
-            AnsiConsole.MarkupLine($"Du har vunnit med [cadetblue]{user.Score}[/] jämfört mot datorns [cadetblue]{computer.Score}[/]. Grattis!");
-            ReturnToMenu();
-            return true;
-        }
-        else if (computer.Score <= 21)
-        {
-            AnsiConsole.MarkupLine($"Datorn har vunnit med [cadetblue]{computer.Score}[/] jämfört mot dina [cadetblue]{user.Score}[/].");
-            ReturnToMenu();
-            return false;
-        }
-        else
-        {
-            return false;
-        }
+        var secondWinResult = (bool)CheckForWin(ref user, ref computer);
+        if (secondWinResult) return true; else return false;
     }
 
     private static bool userLost(int score)
@@ -220,15 +211,14 @@ public class Program
 
     private static bool CheckForWin(int score, ref Program user)
     {
-        //score is always 21 or over here
+        AnsiConsole.MarkupLine($"Du fick kortet [cadetblue]{user.Card}[/]. Du har nu [cadetblue]{user.Score}[/] poäng.");
         if (score > 21)
         {
-            AnsiConsole.MarkupLine($"Du fick kortet [cadetblue]{user.Card}[/]. Du har nu [cadetblue]{user.Score}[/] poäng.");
             return false;
+            //score is always 21 or over here
         }
         else
         {
-            AnsiConsole.MarkupLine($"Du fick kortet [cadetblue]{user.Card}[/]. Du har nu [cadetblue]{user.Score}[/] poäng.");
             return true;
             //score is 21
         }
@@ -241,7 +231,7 @@ public class Program
             string? userName = String.Empty;
             Console.Clear();
             Console.WriteLine("");
-            Console.Write("Ange ditt namn: ");
+            AnsiConsole.Markup("[darkgoldenrod]Ange ditt namn: [/]");
 
             userName = Console.ReadLine();
             bool isAlpha = userName.All(Char.IsLetter);
@@ -250,9 +240,9 @@ public class Program
             {
                 Console.Clear();
                 Console.WriteLine("");
-                Console.WriteLine("Ditt namn får endast innehålla vanliga bokstäver.");
+                AnsiConsole.Markup("[darkgoldenrod]Ditt namn får endast innehålla vanliga bokstäver.[/]");
                 Console.WriteLine("");
-                Console.WriteLine("Tryck vilken tangent som helst för att bekräfta.");
+                AnsiConsole.MarkupLine("[darkgoldenrod]Tryck vilken tangent som helst för att bekräfta.[/]");
                 Console.ReadKey();
                 Console.Clear();
                 continue;
@@ -296,12 +286,10 @@ public class Program
                     
                     if (Play21())
                     {
-                        playerStats.SaveChanges();
                         playerStats.RecordPlayerWin(nameOfUser, userMoney, userBet);
                     }
                     else
                     {
-                        playerStats.SaveChanges();
                         playerStats.RecordPlayerLoss(nameOfUser, userMoney, userBet);
                     }
                 }
@@ -342,7 +330,7 @@ public class Program
                 var json = File.ReadAllText("playerStats.json");
                 if (json != "{}")
                 {
-                    ResetStats();
+                    ResetStats(ref playerStats);
                 }
                 else
                 {
@@ -359,27 +347,27 @@ public class Program
         }
     }
 
-    private static void ResetStats()
+    private static void ResetStats(ref PlayerStatsDatabase playerStats)
     {
-        AnsiConsole.MarkupLine("[red1]Tryck Delete om du vill återställa statistiken. (Återställs efter omstart av programmet)[/]");
+        AnsiConsole.MarkupLine("[red1]Tryck Delete om du vill återställa statistiken.[/]");
         Console.WriteLine("");
         AnsiConsole.MarkupLine("[darkgoldenrod]   Tryck på vilken tangent som helst för att gå tillbaka.[/]");
         var input = Console.ReadKey();
 
         if (input.Key == ConsoleKey.Delete)
         {
-            AnsiConsole.MarkupLine("[darkgoldenrod]Är du säker?[/]");
+            Console.Clear();
+            Console.WriteLine("");
+            Console.WriteLine("");
+            AnsiConsole.MarkupLine("                 [darkgoldenrod]Är du säker?[/][royalblue1](ja/nej)[/]");
             while (UserInputIsYes())
             {
                 File.WriteAllText("playerStats.json", "{}");
-                var json = File.ReadAllText("playerStats.json");
+                playerStats.ResetStats();
                 break;
             }
         }   //resets stats and ask to return to menu
-        else
-        {
-            return;
-        }
+        else return;
     }
 
     private static bool AskForRematch()
@@ -399,7 +387,7 @@ public class Program
         Console.Clear();
         Console.WriteLine("");
         AnsiConsole.MarkupLine("~     Spelet går ut på att man tar kort tills du har [orange1]21[/], eller så nära som möjligt, men inte mer.");
-        AnsiConsole.MarkupLine("~     [orange1]Ess[/] är värt [orange1]1[/] poäng, [orange1]knekt 11[/], [orange1]dam 12[/] och [orange1]kung 13[/].");
+        AnsiConsole.MarkupLine("~     [orange1]Ess[/] är värt [orange1]1[/] poäng, [orange1]knekt,[/], [orange1]dam[/] och [orange1]kung[/] är alla värda [orange1]10[/] poäng.");
         AnsiConsole.MarkupLine("~     Det du bettar [skyblue2]dubblas om du vinner[/], om du förlorar så [skyblue2]förlorar du det som du bettat[/].");
         AnsiConsole.MarkupLine("~     Du får [skyblue2]10 poäng[/] för varje match du förlorar, så du inte fastnar på 0 poäng.");
         ReturnToMenu();
@@ -427,8 +415,9 @@ public class Program
         while (true)
         {   
             Console.Clear();
-            AnsiConsole.MarkupLine("[dodgerblue1]  Välkommen till[/] [deepskyblue2]21an![/]");
-            Console.WriteLine("  Välj ett alternativ nedan.");
+            AnsiConsole.MarkupLine("[dodgerblue1]                  Välkommen till[/] [deepskyblue2]21an![/]");
+            Console.WriteLine("  Välj ett alternativ nedan med hjälp av tangenterna 1-5.");
+            Console.WriteLine("               Bekräfta med enter.");
             Console.WriteLine("");
             AnsiConsole.MarkupLine("[darkgoldenrod]  1.[/] Spela 21an");
             AnsiConsole.MarkupLine("[darkgoldenrod]  2.[/] Senaste Vinnaren");

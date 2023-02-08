@@ -51,6 +51,11 @@ internal class PlayerStatsDatabase
         File.WriteAllText(path, jsonToWrite);
     } //saves the stats and sends it to the json file.
 
+    internal void ResetStats()
+    {
+        _players.Clear();
+    }
+
     private Dictionary<string, PlayerStats> LoadPlayerStatsFromFile()
     {
         if (File.Exists(path))
