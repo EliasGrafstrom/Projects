@@ -419,7 +419,7 @@ public class Program
             AnsiConsole.MarkupLine("[orange1]  Välj ett alternativ nedan med hjälp av tangenterna 1-5.[/]");
             AnsiConsole.MarkupLine("[orange1]               Bekräfta med enter.[/]");
             Console.WriteLine("");
-            AnsiConsole.MarkupLine("[darkgoldenrod]  1.[/] Spela inte 21an");
+            AnsiConsole.MarkupLine("[darkgoldenrod]  1.[/] Spela 21an");
             AnsiConsole.MarkupLine("[darkgoldenrod]  2.[/] Senaste Vinnaren");
             AnsiConsole.MarkupLine("[darkgoldenrod]  3.[/] Spelets Regler");
             AnsiConsole.MarkupLine("[darkgoldenrod]  4.[/] Sök Statistiken");
