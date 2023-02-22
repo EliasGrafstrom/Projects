@@ -326,15 +326,21 @@ public class Program
                 {
                     Console.WriteLine($"{user.Name.FirstCharToUpper()} {user.Stats}\n");
                 }
-                var json = File.ReadAllText("playerStats.json");
-                if (json != "{}")
+                string json = String.Empty;
+                if (File.Exists("playerStats.json"))
                 {
-                    ResetStats(ref playerStats);
-                }
-                else
-                {
-                    Console.WriteLine("Det finns inget att visa här.");
-                    ReturnToMenu();
+                    using (StreamWriter w = File.AppendText("playerStats.json"))
+                        w.Close();
+                    using (StreamReader sr = File.ReadLines("playerStats.json"))
+                        if (w != "{}")
+                    {
+                        ResetStats(ref playerStats);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Det finns inget att visa här.");
+                        ReturnToMenu();
+                    }
                 }
                 break;
             case "6":
