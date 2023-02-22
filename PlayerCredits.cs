@@ -24,7 +24,7 @@ namespace _21an
                 int result =  newPerson.Credits = 500;
                 return result;
             }
-            //if person doesn't exist, create person and give them credits.
+            //if person doesn't exist, create person and give them credits
             return creditsProfile.ReturnUserCredits(userName);
         }
 
