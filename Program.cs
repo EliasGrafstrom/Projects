@@ -326,7 +326,7 @@ public class Program
                 {
                     Console.WriteLine($"{user.Name.FirstCharToUpper()} {user.Stats}\n");
                 }
-                string json = String.Empty;
+                
                 if (File.Exists("playerStats.json"))
                 {
                     StreamReader sr = new StreamReader("playerStats.json");
@@ -338,9 +338,16 @@ public class Program
                     }
                     else
                     {
+                        Console.WriteLine("");
                         Console.WriteLine("Det finns inget att visa här.");
                         ReturnToMenu();
                     }
+                }
+                else
+                {
+                    Console.WriteLine("");
+                    Console.WriteLine("Det finns inget att visa här.");
+                    ReturnToMenu();
                 }
                 break;
             case "6":
