@@ -329,10 +329,10 @@ public class Program
                 string json = String.Empty;
                 if (File.Exists("playerStats.json"))
                 {
-                    using (StreamWriter w = File.AppendText("playerStats.json"))
-                        w.Close();
-                    using (StreamReader sr = File.ReadLines("playerStats.json"))
-                        if (w != "{}")
+                    StreamReader sr = new StreamReader("playerStats.json");
+                    string srOutput = sr.ReadToEnd();
+                    sr.Close();
+                    if (srOutput != "{}") 
                     {
                         ResetStats(ref playerStats);
                     }
