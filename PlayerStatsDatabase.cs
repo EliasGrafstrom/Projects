@@ -54,6 +54,9 @@ internal class PlayerStatsDatabase
     internal void ResetStats()
     {
         _players.Clear();
+        StreamWriter sw = new StreamWriter("lastWinner.txt");
+        sw.Write("Ingen har spelat än.");
+        sw.Close();
     }
 
     private Dictionary<string, PlayerStats> LoadPlayerStatsFromFile()

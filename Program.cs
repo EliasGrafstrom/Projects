@@ -1,5 +1,7 @@
 ﻿using _21an;
 using Spectre.Console;
+using System.Reflection;
+
 public class Program
 {
     public Card? Card { get; set; }
@@ -299,11 +301,8 @@ public class Program
             case "2":
                 Console.Clear();
                 Console.WriteLine("");
-                StreamReader file = new StreamReader("lastWinner.txt");
-                string textLine = file.ReadLine();
-                Console.WriteLine(textLine != "Ingen har spelat än" ? $"Senaste vinnaren var {textLine}." : textLine);
-                file.Close();
-                ReturnToMenu(); 
+                Console.WriteLine(WriteLastWinner());
+                ReturnToMenu();
                 break;
             case "3":
                 Play21Rules();
@@ -340,11 +339,24 @@ public class Program
                 break;
             case "6":
                 StreamWriter sw = new StreamWriter("lastWinner.txt");
-                sw.WriteLine("Ingen har spelat än");
+                sw.WriteLine("Ingen har spelat än.");
                 sw.Close();
                 Environment.Exit(0);
                 break;
         }
+    }
+
+    private static string WriteLastWinner()
+    {
+        if (!File.Exists("lastWinner.txt"))
+            return "Ingen har spelat än.";
+
+        using var reader = new StreamReader("lastWinner.txt");
+        string? winner = reader.ReadLine();
+
+        return winner == "Ingen har spelat än."
+            ? winner
+            : $"Senaste vinnaren var {winner}.";
     }
 
     private static void ResetStats(ref PlayerStatsDatabase playerStats)
@@ -387,7 +399,7 @@ public class Program
         Console.Clear();
         Console.WriteLine("");
         AnsiConsole.MarkupLine("~     Spelet går ut på att man tar kort tills du har [orange1]21[/], eller så nära som möjligt, men inte mer.");
-        AnsiConsole.MarkupLine("~     [orange1]Ess[/] är värt [orange1]1[/] poäng, [orange1]knekt,[/], [orange1]dam[/] och [orange1]kung[/] är alla värda [orange1]10[/] poäng.");
+        AnsiConsole.MarkupLine("~     [orange1]Ess[/] är värt [orange1]1[/] poäng, [orange1]knekt[/], [orange1]dam[/] och [orange1]kung[/] är alla värda [orange1]10[/] poäng.");
         AnsiConsole.MarkupLine("~     Det du bettar [skyblue2]dubblas om du vinner[/], om du förlorar så [skyblue2]förlorar du det som du bettat[/].");
         AnsiConsole.MarkupLine("~     Du får [skyblue2]10 poäng[/] för varje match du förlorar, så du inte fastnar på 0 poäng.");
         ReturnToMenu();
@@ -419,7 +431,7 @@ public class Program
             AnsiConsole.MarkupLine("[orange1]  Välj ett alternativ nedan med hjälp av tangenterna 1-5.[/]");
             AnsiConsole.MarkupLine("[orange1]               Bekräfta med enter.[/]");
             Console.WriteLine("");
-            AnsiConsole.MarkupLine("[darkgoldenrod]  1.[/] Spela inte 21an");
+            AnsiConsole.MarkupLine("[darkgoldenrod]  1.[/] Spela 21an");
             AnsiConsole.MarkupLine("[darkgoldenrod]  2.[/] Senaste Vinnaren");
             AnsiConsole.MarkupLine("[darkgoldenrod]  3.[/] Spelets Regler");
             AnsiConsole.MarkupLine("[darkgoldenrod]  4.[/] Sök Statistiken");
