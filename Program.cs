@@ -378,7 +378,7 @@ public class Program
                 playerStats.ResetStats();
                 break;
             }
-        }   //resets stats and ask to return to menu
+        }   //resets stats and ask to return to menu.
         else return;
     }
 
