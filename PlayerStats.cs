@@ -5,15 +5,6 @@
     public int Credits { get; set; }
     public override string ToString()
     {
-        return ($"\nAntal Matcher: {Matches} \nAntal Vunna Matcher: {Wins} \nProcentuellt Antal Vunna Matcher:{WinPercentage()} \nAntal Credits: {Credits}");
-    }
-    
-    public string WinPercentage()
-    {
-        double wins = Wins;
-        double matches = Matches;
-        double winPercentage = (wins / matches) * 100;
-        int winPercentageInt = Convert.ToInt32(winPercentage);
-        return ($" {winPercentageInt}%");
+        return ($"\nAntal Matcher: {Matches} \nAntal Vunna Matcher: {Wins} \nAntal Credits: {Credits}");
     }
 }
